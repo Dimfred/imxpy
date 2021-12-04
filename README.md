@@ -25,4 +25,9 @@ Have a lot of todos, super prototypi rightnow
     )
 
     # todo fix more examples for now look in the code
-    client.mint(...)
+    future = client.mint(...)
+    res = future.result()
+
+    # if not interested in results, just make the internal pool shutdown
+    # this will run all internal processes
+    client.wait()
