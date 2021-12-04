@@ -1,0 +1,7 @@
+# python
+**/__pycache__/**
+
+# node
+**/node_modules/**
+**/build/**
+
