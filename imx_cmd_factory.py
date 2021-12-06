@@ -64,10 +64,6 @@ class CmdFactory:
 
         cmd += CmdHelper.node(binary)
 
-        print(cmd)
-        import sys
-        sys.exit()
-
         return cmd
 
     @staticmethod
