@@ -29,7 +29,7 @@ from .imx_cmd_factory import CmdFactory
 
 class IMXClient:
     def __init__(self, net, n_workers=32, pk=None):
-        self.pk = None
+        self.pk = pk
         self.net = net
         self._init_urls(net)
 
