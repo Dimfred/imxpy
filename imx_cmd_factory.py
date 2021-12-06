@@ -52,17 +52,21 @@ class CmdFactory:
             {"id": str(token), "blueprint": str(blueprint)}
             for token, blueprint in tokens
         ]
-        tokens = f"'{json.dumps(tokens)}'"
+        tokens = json.dumps(tokens)
 
         cmd = CmdHelper.base(pk, network)
         cmd += CmdHelper.export("TOKENS", tokens)
         cmd += CmdHelper.export("MINT_TO_ADDR", mint_to_addr)
         cmd += CmdHelper.export("CONTRACT_ADDR", contract_addr)
         if royalties is not None:
-            royalties = f"'{json.dumps(royalties)}'"
+            royalties = json.dumps(royalties)
             cmd += CmdHelper.export("ROYALTIES", royalties)
 
         cmd += CmdHelper.node(binary)
+
+        print(cmd)
+        import sys
+        sys.exit()
 
         return cmd
 
