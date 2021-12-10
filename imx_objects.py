@@ -409,3 +409,7 @@ class CreateOrderParams(BaseModel):
         d["amountBuy"] = d["tokenBuy"]["data"].pop("quantity")
 
         return d
+
+
+class CancelOrderParams(BaseModel):
+    order_id: Union[str, int]

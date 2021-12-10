@@ -237,7 +237,9 @@ class TestWithdrawal:
 
 
 class TestTrading:
-    def test_okay_order_sell(self, client, acc1, minted_nft_id, contract_addr):
+    def test_okay_order_sell_and_cancel(
+        self, client, acc1, minted_nft_id, contract_addr
+    ):
         # imx db takes a bit time after the asset was minted
         time.sleep(1)
         params = CreateOrderParams(
@@ -250,6 +252,13 @@ class TestTrading:
 
         assert res["status"] == "success"
         assert res["result"]["order_id"]
+
+        order_id = res["result"]["order_id"]
+        params = CancelOrderParams(order_id=order_id)
+        res = client.cancel_order(params)
+        res = res.result()
+
+        assert res["status"] == "success"
 
     def test_okay_order_buy(self):
         # TODO I think this didn't work for serveral people, just let it here as

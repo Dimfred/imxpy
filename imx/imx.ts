@@ -160,6 +160,12 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "cancel_order": {
+            params["starkPublicKey"] = client.starkPublicKey;
+            res = await client.cancelOrder(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }
