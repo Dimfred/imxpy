@@ -97,6 +97,18 @@ class Validator:
 
         return addr.lower()
 
+    @staticmethod
+    def validate_token(token):
+        if token.type in ("ETH", "ERC20"):
+            safe_number = utils.SafeNumber(
+                number=token.quantity, decimals=token.decimals, as_wei=token.as_wei
+            )
+        else:  # ERC721
+            safe_number = utils.SafeNumber(number=token.quantity, as_wei=True)
+
+        token.quantity = safe_number.value
+        return token
+
 
 ########################################################################################
 # ENUMS
@@ -252,16 +264,8 @@ class TransferParams(BaseModel):
         return Validator.validate_addr(addr)
 
     @validator("token")
-    def validate_data(cls, data):
-        if data.type in ("ETH", "ERC20"):
-            safe_number = utils.SafeNumber(
-                number=data.quantity, decimals=data.decimals, as_wei=data.as_wei
-            )
-        else:  # ERC721
-            safe_number = utils.SafeNumber(number=data.quantity, as_wei=True)
-
-        data.quantity = safe_number.value
-        return data
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
 
     def dict(self, *args, **kwargs):
         d = super().dict(*args, **kwargs)
@@ -313,3 +317,27 @@ class MintParams(BaseModel):
             Utils.exclude("royalties", kwargs)
 
         return [super().dict(*args, **kwargs)]
+
+
+########################################################################################
+# BURN
+########################################################################################
+
+
+class BurnParams(BaseModel):
+    sender: str
+    token: Strict[Union[ETH, ERC20, ERC721]]
+
+    @validator("sender")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    @validator("token")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["quantity"] = d["token"]["data"].pop("quantity")
+
+        return d

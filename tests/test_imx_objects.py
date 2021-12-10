@@ -148,21 +148,25 @@ class TestMintParams:
         assert m.dict() == expected
 
     def test_okay_mintparams_without_royalties(self, acc1):
-        expected = {
-            "contractAddress": acc1.addr,
-            "users": [
-                {
-                    "etherKey": acc1.addr,
-                    "tokens": [
-                        {
-                            "id": "1",
-                            "blueprint": "test",
-                            "royalties": [{"recipient": acc1.addr, "percentage": 1.0}],
-                        }
-                    ],
-                }
-            ],
-        }
+        expected = [
+            {
+                "contractAddress": acc1.addr,
+                "users": [
+                    {
+                        "etherKey": acc1.addr,
+                        "tokens": [
+                            {
+                                "id": "1",
+                                "blueprint": "test",
+                                "royalties": [
+                                    {"recipient": acc1.addr, "percentage": 1.0}
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            }
+        ]
 
         m = MintParams(
             contract_addr=acc1.addr,
@@ -182,22 +186,26 @@ class TestMintParams:
         assert m.dict() == expected
 
     def test_okay_mintparams_with_royalties(self, acc1):
-        expected = {
-            "contractAddress": acc1.addr,
-            "users": [
-                {
-                    "etherKey": acc1.addr,
-                    "tokens": [
-                        {
-                            "id": "1",
-                            "blueprint": "test",
-                            "royalties": [{"recipient": acc1.addr, "percentage": 1.0}],
-                        }
-                    ],
-                }
-            ],
-            "royalties": [{"recipient": acc1.addr, "percentage": 1.0}],
-        }
+        expected = [
+            {
+                "contractAddress": acc1.addr,
+                "users": [
+                    {
+                        "etherKey": acc1.addr,
+                        "tokens": [
+                            {
+                                "id": "1",
+                                "blueprint": "test",
+                                "royalties": [
+                                    {"recipient": acc1.addr, "percentage": 1.0}
+                                ],
+                            }
+                        ],
+                    }
+                ],
+                "royalties": [{"recipient": acc1.addr, "percentage": 1.0}],
+            }
+        ]
 
         m = MintParams(
             contract_addr=acc1.addr,

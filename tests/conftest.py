@@ -100,3 +100,29 @@ def token_id(client2, acc1, acc2, contract_addr):
         token=ERC721(token_id=_token_id, contract_addr=contract_addr),
     )
     client2.transfer(params)
+
+@pytest.fixture(scope="function")
+def minted_nft_id(client, acc1, contract_addr):
+    import random
+
+    id_ = random.randint(0, 100000000000000000000000000000000000)
+    params = MintParams(
+        contract_addr=contract_addr,
+        targets=[
+            MintTarget(
+                addr=acc1.addr,
+                tokens=[
+                    MintableToken(
+                        id=id_,
+                        blueprint=str(id_),
+                    ),
+                ]
+            ),
+        ],
+    )
+    res = client.mint(params, max_retries=1)
+    res = res.result()
+
+    assert res["status"] == "success"
+
+    return id_

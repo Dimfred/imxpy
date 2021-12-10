@@ -187,3 +187,17 @@ class TestMint:
 
         assert res["status"] == "error"
         assert "asset, duplicate id" in res["result"]
+
+
+class TestBurn:
+    def test_okay_burn(self, client, acc1, contract_addr, minted_nft_id):
+        # sends the nft to the burn addr, which is <TODO>
+        params = BurnParams(
+            sender=acc1.addr,
+            token=ERC721(token_id=minted_nft_id, contract_addr=contract_addr),
+        )
+        res = client.burn(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+        assert res["result"]["transfer_id"]

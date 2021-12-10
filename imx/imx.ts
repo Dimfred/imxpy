@@ -139,6 +139,15 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "burn": {
+            res = await client.burn(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        // TODO
+        // case "withdraw": {
+        //     res = await client.withdraw(params);
+        // }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }

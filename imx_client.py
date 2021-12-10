@@ -27,11 +27,9 @@ import imxpy.utils as utils
 # TODO fix me ffs
 try:
     from .imx_db import IMXDB
-    from .imx_cmd_factory import CmdFactory
     from .imx_objects import *
 except:
     from imx_db import IMXDB
-    from imx_cmd_factory import CmdFactory
     from imx_objects import *
 
 
@@ -43,8 +41,8 @@ class IMXClient:
         self.pool = ThreadPoolExecutor(n_workers)
 
     @utils.ensure_pk
-    def register(self, max_retries=1):
-        return self._run_pool("register", max_retries=max_retries)
+    def register(self, max_retries: int = 1):
+        return self._run_pool("register", None, max_retries)
 
     @utils.ensure_pk
     def create_project(self, params: CreateProjectParams, max_retries: int = 1):
@@ -60,23 +58,27 @@ class IMXClient:
 
     @utils.ensure_pk
     def create_metadata_schema(
-        self, params: CreateMetadataSchemaParams, max_retries=10
+        self, params: CreateMetadataSchemaParams, max_retries: int = 1
     ):
         return self._run_pool("create_metadata_schema", params, max_retries)
 
     @utils.ensure_pk
-    def transfer(self, params: TransferParams, max_retries: int = 10):
+    def transfer(self, params: TransferParams, max_retries: int = 1):
         print(params.dict())
         return self._run_pool("transfer", params, max_retries)
 
     @utils.ensure_pk
-    def mint(self, params: MintParams, max_retries: int = 10):
+    def mint(self, params: MintParams, max_retries: int = 1):
         return self._run_pool("mint", params, max_retries)
+
+    @utils.ensure_pk
+    def burn(self, params: BurnParams, max_retries: int = 1):
+        return self._run_pool("burn", params, max_retries)
 
     def wait(self):
         self.pool.shutdown()
 
-    def _run_pool(self, function_name: str, params=None, max_retries=1):
+    def _run_pool(self, function_name: str, params=None, max_retries: int = 1):
         def _run_cmd(function_name, cmd, max_retries):
             for _ in range(max_retries):
                 res = sp.run(cmd, shell=True, capture_output=True)
@@ -88,15 +90,6 @@ class IMXClient:
 
         cmd = self._make_cmd(function_name, params)
         return self.pool.submit(_run_cmd, function_name, cmd, max_retries)
-
-    def _run_cmd(self, function_name, cmd, max_retries):
-        for _ in range(max_retries):
-            res = sp.run(cmd, shell=True, capture_output=True)
-            res = self._parse_result(res, function_name)
-            if res["status"] != "error" or not max_retries:
-                break
-
-        return res
 
     def _make_cmd(self, function_name, params=None):
         base_params = BaseParams(
@@ -122,7 +115,7 @@ class IMXClient:
 
         res = res.stdout.decode()
         # DEBUG whole stdout output
-        print(res)
+        # print(res)
         try:
             res = json.loads(res)
         except Exception as e:
