@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import time
 
 # add parent dir of imxpy
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -10,6 +11,12 @@ import pytest
 
 from imx_client import IMXClient
 from imx_objects import *
+
+
+def random_number():
+    import random
+
+    return random.randint(0, 100000000000000000000000000000000000)
 
 
 @pytest.fixture
@@ -28,6 +35,7 @@ def acc2():
     acc.addr = "0xea047d1919b732a4b9b12337a60876536f4f2659"
 
     return acc
+
 
 @pytest.fixture
 def acc3():
@@ -84,6 +92,7 @@ def random_addr():
 def contract_addr():
     return "0xb72d1aa092cf5b3b50dabb55bdab0f33dfab37b7"
 
+
 @pytest.fixture
 def unregistered_contract_addr():
     return "0xb55016be31047c16c951612f3b0f7c5f92f1faf5"
@@ -101,28 +110,57 @@ def token_id(client2, acc1, acc2, contract_addr):
     )
     client2.transfer(params)
 
-@pytest.fixture(scope="function")
-def minted_nft_id(client, acc1, contract_addr):
-    import random
 
-    id_ = random.randint(0, 100000000000000000000000000000000000)
+def mint_params(contract_addr, id_, addr):
     params = MintParams(
         contract_addr=contract_addr,
         targets=[
             MintTarget(
-                addr=acc1.addr,
+                addr=addr,
                 tokens=[
                     MintableToken(
                         id=id_,
                         blueprint=str(id_),
                     ),
-                ]
+                ],
             ),
         ],
     )
-    res = client.mint(params, max_retries=1)
+
+    return params
+
+
+@pytest.fixture(scope="function")
+def minted_nft_id(client, acc1, contract_addr):
+
+    token_id = random_number()
+    params = mint_params(contract_addr, token_id, acc1.addr)
+    res = client.mint(params)
     res = res.result()
 
-    assert res["status"] == "success"
+    # wait until the database has applied the state
+    time.sleep(2)
 
-    return id_
+    return token_id
+
+
+@pytest.fixture(scope="function")
+def valid_order_params(client, client2, acc2, contract_addr):
+    # client1 is in control of the sc therefore he mints to acc2
+    token_id = random_number()
+    params = mint_params(contract_addr, token_id, acc2.addr)
+    res = client.mint(params)
+    time.sleep(2)
+
+    # client2 now has the nft and can create the order which client1 will buy
+    params = CreateOrderParams(
+        sender=acc2.addr,
+        token_sell=ERC721(token_id=token_id, contract_addr=contract_addr),
+        token_buy=ETH(quantity="0.000001"),
+    )
+    res = client2.create_order(params)
+    res = res.result()
+
+    time.sleep(2)
+
+    return (res["result"]["order_id"], token_id)

@@ -148,8 +148,9 @@ var createErrorMsg = function (msg) {
                     case "complete_withdrawal": return [3 /*break*/, 21];
                     case "create_order": return [3 /*break*/, 23];
                     case "cancel_order": return [3 /*break*/, 25];
+                    case "create_trade": return [3 /*break*/, 27];
                 }
-                return [3 /*break*/, 27];
+                return [3 /*break*/, 29];
             case 2: return [4 /*yield*/, client.registerImx({
                     etherKey: client.address.toLowerCase(),
                     starkPublicKey: client.starkPublicKey
@@ -157,33 +158,33 @@ var createErrorMsg = function (msg) {
             case 3:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 4: return [4 /*yield*/, client.createProject(params)];
             case 5:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 6: return [4 /*yield*/, client.createCollection(params)];
             case 7:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 8: return [4 /*yield*/, client.updateCollection(params.contractAddress, params.params)];
             case 9:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 10: return [4 /*yield*/, client.addMetadataSchemaToCollection(params.contractAddress, params.params)];
             case 11:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 12:
                 {
                     // TODO
                     throw new Error("update_metadata_schema not implemented");
                     // res = await client.updateMetadataSchemaByName()
-                    return [3 /*break*/, 28];
+                    return [3 /*break*/, 30];
                 }
                 _b.label = 13;
             case 13:
@@ -192,47 +193,52 @@ var createErrorMsg = function (msg) {
             case 14:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 15: return [4 /*yield*/, client.mintV2(params)];
             case 16:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 17: return [4 /*yield*/, client.burn(params)];
             case 18:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 19: return [4 /*yield*/, client.prepareWithdrawal(params)];
             case 20:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 21:
                 params["starkPublicKey"] = client.starkPublicKey;
                 return [4 /*yield*/, client.completeWithdrawal(params)];
             case 22:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 23: return [4 /*yield*/, client.createOrder(params)];
             case 24:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
+                return [3 /*break*/, 30];
             case 25:
                 params["starkPublicKey"] = client.starkPublicKey;
                 return [4 /*yield*/, client.cancelOrder(params)];
             case 26:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 28];
-            case 27:
+                return [3 /*break*/, 30];
+            case 27: return [4 /*yield*/, client.createTrade(params)];
+            case 28:
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 30];
+            case 29:
                 {
                     throw new Error("Invalid method name: '" + baseParams.method_name + "'");
                 }
-                _b.label = 28;
-            case 28:
+                _b.label = 30;
+            case 30:
                 // log result to stdout to be parsed by the python process
                 console.log(JSON.stringify(msg));
                 return [2 /*return*/];

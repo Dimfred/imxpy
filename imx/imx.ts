@@ -166,6 +166,11 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "create_trade": {
+            res = await client.createTrade(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }

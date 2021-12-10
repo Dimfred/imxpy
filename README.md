@@ -40,9 +40,9 @@ Other examples on how to use the `client` correctly can be found in `tests/test_
 - client features:
   - ~~withdraw~~
   - ~~sell order~~
-  - trades
+  - ~~cancel order~~
+  - ~~create trade~~
   - buy order?
-  - TODO complete this list (lol)
 
 - database features:
   - almost every is missing except for transfer, asset n stuff

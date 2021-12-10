@@ -241,7 +241,6 @@ class TestTrading:
         self, client, acc1, minted_nft_id, contract_addr
     ):
         # imx db takes a bit time after the asset was minted
-        time.sleep(1)
         params = CreateOrderParams(
             sender=acc1.addr,
             token_sell=ERC721(token_id=minted_nft_id, contract_addr=contract_addr),
@@ -264,3 +263,18 @@ class TestTrading:
         # TODO I think this didn't work for serveral people, just let it here as
         # a reminder to test at some point
         pass
+
+    def test_okay_create_trade(self, client, acc1, valid_order_params, contract_addr):
+        order_id, token_id = valid_order_params
+
+        params = CreateTradeParams(
+            sender=acc1.addr,
+            order_id=order_id,
+            token_buy=ERC721(token_id=token_id, contract_addr=contract_addr),
+            token_sell=ETH(quantity="0.000001"),
+        )
+        res = client.create_trade(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+        assert res["result"]["trade_id"]
