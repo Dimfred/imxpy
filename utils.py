@@ -18,6 +18,8 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import sys
 import datetime as dt
+from pydantic import BaseModel, Field, validator
+from typing import Union, Optional
 
 
 def ensure_pk(func):
@@ -47,16 +49,53 @@ def make_unique(iterable, key=None):
     return iterable
 
 
-TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+class IMXTime:
+    format_ = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+    @staticmethod
+    def from_str(timestamp_str):
+        return dt.datetime.strptime(timestamp_str, IMXTime.format_)
+
+    @staticmethod
+    def to_str(timestamp):
+        return timestamp.strftime(IMXTime.format_)
+
+    @staticmethod
+    def now():
+        return dt.datetime.utcnow()
 
 
-def timestamp_from_str(timestamp_str):
-    return dt.datetime.strptime(timestamp_str, TIMESTAMP_FORMAT)
+class SafeNumber:
+    def __init__(self, number, decimals=None, as_wei=False):
+        self.value = self.convert_to_safe(number, decimals, as_wei)
 
+    def convert_to_safe(self, number, decimals, as_wei):
+        if not isinstance(number, (int, str)):
+            raise ValueError("Only 'str' and 'int' numbers allowed.")
 
-def timestamp_to_str(timestamp):
-    return timestamp.strftime(TIMESTAMP_FORMAT)
+        if as_wei:
+            # raises if there are fobidden chars in str
+            return str(int(number))
 
+        number = str(number)
+        if "." not in number:
+            before_comma, after_comma = number, ""
+        else:
+            before_comma, after_comma = number.split(".")
 
-def timestamp_now():
-    return dt.datetime.utcnow()
+        if len(after_comma) > decimals:
+            raise ValueError(
+                f"More decimals present than allowed\n\tnumber: {number}\n\t:decimals: {decimals}"
+            )
+
+        len_padding = decimals - len(after_comma)
+        padding = "".join("0" for _ in range(len_padding))
+
+        safe_number = ""
+        if int(before_comma):
+            safe_number = before_comma + after_comma + padding
+        else:
+            # remove leading zeros and append
+            safe_number = str(int(after_comma)) + padding
+
+        return safe_number

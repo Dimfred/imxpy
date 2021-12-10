@@ -1,6 +1,7 @@
+import { BigNumber } from 'ethers';
 import { AlchemyProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
-import { ImmutableXClient } from '@imtbl/imx-sdk'
+import { ImmutableXClient, ETHTokenType, ERC721TokenType, ERC20TokenType } from '@imtbl/imx-sdk'
 
 const provider = new AlchemyProvider('ropsten', "DvukuyBzEK-JyP6zp1NVeNVYLJCrzjp_");
 
@@ -17,19 +18,19 @@ const networkParams = {
     }
 }
 
+// TODO remove export later
 export const CreateIMXClient = async (
     privateKey: string,
     network: string,
     gasLimit: string = "",
-    gasPrice: string = ""): Promise<ImmutableXClient> =>
-{
+    gasPrice: string = ""): Promise<ImmutableXClient> => {
     let selectedNetwork;
     if (network === "test")
         selectedNetwork = networkParams.test;
     else if (network === "main")
         selectedNetwork = networkParams.main;
     else
-        throw Error(`Unknown network type: '${network}'`);
+        throw Error(`[TYPESCRIPTWRAPPER]: Unknown network type: '${network}'`);
 
     // TODO do I have to connect each time?
     const signer = new Wallet(privateKey).connect(provider);
@@ -45,6 +46,7 @@ export const CreateIMXClient = async (
     return client;
 }
 
+// TODO remove export later
 export const waitForTransaction = async (promise: Promise<string>) => {
     const txId = await promise;
     console.log('Waiting for transaction', {
@@ -59,3 +61,104 @@ export const waitForTransaction = async (promise: Promise<string>) => {
     console.log('Transaction Mined: ' + receipt.blockNumber);
     return receipt;
 };
+
+const createSuccessMsg = (msg: any) => {
+    return {
+        "status": "success",
+        "result": msg
+    }
+};
+
+const createErrorMsg = (msg: any) => {
+    return {
+        "status": "error",
+        "result": msg
+    }
+};
+
+(async (): Promise<void> => {
+
+    const baseParams = JSON.parse(process.env.BASE_PARAMS!);
+    const params = JSON.parse(process.env.PARAMS!);
+
+    const client = await CreateIMXClient(
+        baseParams.pk,
+        baseParams.network,
+        baseParams.gas_limit,
+        baseParams.gas_price
+    );
+
+    let res, msg;
+    switch (baseParams.function_name) {
+        case "register": {
+            res = await client.registerImx({
+                etherKey: client.address.toLowerCase(),
+                starkPublicKey: client.starkPublicKey
+            });
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "create_project": {
+            res = await client.createProject(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "create_collection": {
+            res = await client.createCollection(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "update_collection": {
+            res = await client.updateCollection(
+                params.contractAddress, params.params
+            );
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "create_metadata_schema": {
+            res = await client.addMetadataSchemaToCollection(
+                params.contractAddress, params.params
+            );
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "update_metadata_schema": {
+            // TODO
+            throw new Error("update_metadata_schema not implemented");
+            // res = await client.updateMetadataSchemaByName()
+            break;
+        }
+        case "transfer": {
+            params.quantity = BigNumber.from(params.quantity);
+            res = await client.transfer(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "mint": {
+            res = await client.mintV2(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        default: {
+            throw new Error(`Invalid method name: '${baseParams.method_name}'`);
+        }
+    }
+
+    // log result to stdout to be parsed by the python process
+    console.log(JSON.stringify(msg));
+
+})().catch((e) => {
+    let msgStr = e.message.toString();
+    let msg;
+    try {
+        msg = JSON.parse(msgStr)["message"];
+    }
+    catch (e_) {
+        msg = `[TYPESCRIPTWRAPPER]: ${e}`;
+    }
+
+    let err = createErrorMsg(msg);
+    console.log(JSON.stringify(err));
+
+    process.exit(1);
+});

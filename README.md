@@ -1,10 +1,8 @@
 # imxpy
 
-## TODO
+## USE AT YOUR OWN RISK
 
-Some text about this is a work in progress, and use at your own risk and blabla
-
-Have a lot of todos, super prototypi rightnow
+THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON'T BE RESPONSIBLE IF YOU LOSE YOUR MONEY!
 
 ## Build & Install
 
@@ -24,10 +22,28 @@ Have a lot of todos, super prototypi rightnow
         net="<main/test>, n_workers=<number of async workers>, pk="<YOUR_PRIVATE_KEY>"
     )
 
-    # todo fix more examples for now look in the code
-    future = client.mint(...)
+    # see imx_objects for parameter types
+    some_params = SomeParams()
+
+    # the client returns a future
+    future = client.some_function(some_params)
+    # resolve the future
     res = future.result()
 
-    # if not interested in results, just make the internal pool shutdown
-    # this will run all internal processes
-    client.wait()
+    # if not interested in returned results, make the client shutdown its running processes
+    client.shutdown()
+
+Other examples on how to use the `client` correctly can be found in `tests/test_imx_client.py`. Tests starting with `test_okay_*`, are meant to show the correct usage of the library, whereas the others show wrong behavior.
+
+## TODO
+
+- client features:
+  - withdraw
+  - orders
+  - trades
+  - TODO complete this list (lol)
+
+- database features:
+  - almost every is missing except for transfer, asset n stuff
+  - write tests for database features
+  - parse the inputs, as well as the results into pydantic objects
