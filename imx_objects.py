@@ -199,10 +199,15 @@ class CreateMetadataSchemaParams(BaseModel):
 
 
 class ETH(BaseModel):
-    quantity: Union[str, int]
+    quantity: Union[int, str] = 0
     type: str = str(TokenType.ETH)
     decimals: int = 18
     as_wei: bool = False
+
+    @validator("quantity")
+    def check_empty(cls, quantity):
+        print("TEST", quantity)
+        return quantity if quantity else 0
 
     def dict(self, *args, **kwargs):
         Utils.exclude("as_wei", kwargs)
@@ -213,8 +218,8 @@ class ETH(BaseModel):
 
 
 class ERC20(BaseModel):
-    quantity: Union[str, int]
     decimals: int
+    quantity: Strict[Union[str, int]] = 0
     type: str = str(TokenType.ERC20)
     as_wei: bool = False
 
@@ -228,8 +233,8 @@ class ERC20(BaseModel):
 
 class ERC721(BaseModel):
     tokenAddress: str = Field(alias="contract_addr")
-    tokenId: Union[str, int] = Field(alias="token_id")
-    quantity: int = 1
+    tokenId: Strict[Union[str, int]] = Field(alias="token_id")
+    quantity: Strict[Union[str, int]] = 1
     type: str = str(TokenType.ERC721)
 
     @validator("quantity")
@@ -339,5 +344,43 @@ class BurnParams(BaseModel):
     def dict(self, *args, **kwargs):
         d = super().dict(*args, **kwargs)
         d["quantity"] = d["token"]["data"].pop("quantity")
+
+        return d
+
+
+########################################################################################
+# WITHDRAW
+########################################################################################
+
+
+class PrepareWithdrawalParams(BaseModel):
+    user: str = Field(alias="sender")
+    token: Strict[Union[ETH, ERC20, ERC721]]
+
+    @validator("user")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    @validator("token")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["quantity"] = d["token"]["data"].pop("quantity")
+
+        return d
+
+
+class CompleteWithdrawalParams(BaseModel):
+    token: Strict[Union[ETH, ERC20, ERC721]]
+
+    @validator("token")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["token"]["data"].pop("quantity")
 
         return d

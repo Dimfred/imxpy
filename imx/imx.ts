@@ -144,10 +144,17 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
-        // TODO
-        // case "withdraw": {
-        //     res = await client.withdraw(params);
-        // }
+        case "prepare_withdrawal": {
+            res = await client.prepareWithdrawal(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "complete_withdrawal": {
+            params["starkPublicKey"] = client.starkPublicKey;
+            res = await client.completeWithdrawal(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }

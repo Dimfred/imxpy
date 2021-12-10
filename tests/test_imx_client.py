@@ -201,3 +201,37 @@ class TestBurn:
 
         assert res["status"] == "success"
         assert res["result"]["transfer_id"]
+
+
+class TestWithdrawal:
+    def test_okay_prepare(self, client, acc1):
+        params = PrepareWithdrawalParams(
+            sender=acc1.addr, token=ETH(quantity="0.0000001")
+        )
+        res = client.prepare_withdrawal(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+        assert res["result"]["withdrawal_id"]
+
+    def test_okay_complete_withdrawal(self, client, acc1):
+        # this test is a bit weird, since it can only run if we have
+        # run prepare_withdrawal before that
+
+        balance = client.db.balances(acc1.addr)
+        withdrawable = int(balance["result"][0]["withdrawable"])
+        if not withdrawable:
+            msg = "[WARNING] 'test_okay_complete_withdrawal', can't run since there is "
+            msg += "no asset to withdraw."
+            print(msg)
+            return
+
+        token = ETH()
+        params = CompleteWithdrawalParams(token=token)
+        res = client.complete_withdrawal(params)
+        res = res.result()
+
+        # always returns success so no help here
+        assert res["status"] == "success"
+        # TODO the result with each withdrawal a new "random" address dunno why yet tho.
+        # assert res["result"] == acc1.addr

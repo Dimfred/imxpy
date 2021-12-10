@@ -71,7 +71,7 @@ class SafeNumber:
 
     def convert_to_safe(self, number, decimals, as_wei):
         if not isinstance(number, (int, str)):
-            raise ValueError("Only 'str' and 'int' numbers allowed.")
+            raise ValueError("SafeNumber: Only 'str' and 'int' numbers allowed.")
 
         if as_wei:
             # raises if there are fobidden chars in str
@@ -94,6 +94,9 @@ class SafeNumber:
         safe_number = ""
         if int(before_comma):
             safe_number = before_comma + after_comma + padding
+        # happens when a 0 is put in
+        elif not safe_number:
+            safe_number = "0"
         else:
             # remove leading zeros and append
             safe_number = str(int(after_comma)) + padding

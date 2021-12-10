@@ -75,6 +75,16 @@ class IMXClient:
     def burn(self, params: BurnParams, max_retries: int = 1):
         return self._run_pool("burn", params, max_retries)
 
+    @utils.ensure_pk
+    def prepare_withdrawal(self, params: PrepareWithdrawalParams, max_retries: int = 1):
+        return self._run_pool("prepare_withdrawal", params, max_retries)
+
+    @utils.ensure_pk
+    def complete_withdrawal(
+        self, params: CompleteWithdrawalParams, max_retries: int = 1
+    ):
+        return self._run_pool("complete_withdrawal", params, max_retries)
+
     def wait(self):
         self.pool.shutdown()
 
