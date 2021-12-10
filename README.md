@@ -38,7 +38,7 @@ Other examples on how to use the `client` correctly can be found in `tests/test_
 ## TODO
 
 - client features:
-  - withdraw
+  - ~~withdraw~~
   - orders
   - trades
   - TODO complete this list (lol)
