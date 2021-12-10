@@ -234,3 +234,24 @@ class TestWithdrawal:
         assert res["status"] == "success"
         # TODO the result with each withdrawal a new "random" address dunno why yet tho.
         # assert res["result"] == acc1.addr
+
+
+class TestTrading:
+    def test_okay_order_sell(self, client, acc1, minted_nft_id, contract_addr):
+        # imx db takes a bit time after the asset was minted
+        time.sleep(1)
+        params = CreateOrderParams(
+            sender=acc1.addr,
+            token_sell=ERC721(token_id=minted_nft_id, contract_addr=contract_addr),
+            token_buy=ETH(quantity="0.000001"),
+        )
+        res = client.create_order(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+        assert res["result"]["order_id"]
+
+    def test_okay_order_buy(self):
+        # TODO I think this didn't work for serveral people, just let it here as
+        # a reminder to test at some point
+        pass

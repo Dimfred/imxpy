@@ -85,6 +85,10 @@ class IMXClient:
     ):
         return self._run_pool("complete_withdrawal", params, max_retries)
 
+    @utils.ensure_pk
+    def create_order(self, params: CreateOrderParams, max_retries: int = 1):
+        return self._run_pool("create_order", params, max_retries)
+
     def wait(self):
         self.pool.shutdown()
 

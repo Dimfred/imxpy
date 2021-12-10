@@ -206,7 +206,6 @@ class ETH(BaseModel):
 
     @validator("quantity")
     def check_empty(cls, quantity):
-        print("TEST", quantity)
         return quantity if quantity else 0
 
     def dict(self, *args, **kwargs):
@@ -382,5 +381,31 @@ class CompleteWithdrawalParams(BaseModel):
     def dict(self, *args, **kwargs):
         d = super().dict(*args, **kwargs)
         d["token"]["data"].pop("quantity")
+
+        return d
+
+
+########################################################################################
+# TRADING
+########################################################################################
+
+
+class CreateOrderParams(BaseModel):
+    user: str = Field(alias="sender")
+    tokenSell: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_sell")
+    tokenBuy: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_buy")
+
+    @validator("user")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    @validator("tokenSell", "tokenBuy")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["amountSell"] = d["tokenSell"]["data"].pop("quantity")
+        d["amountBuy"] = d["tokenBuy"]["data"].pop("quantity")
 
         return d

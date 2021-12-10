@@ -39,8 +39,9 @@ Other examples on how to use the `client` correctly can be found in `tests/test_
 
 - client features:
   - ~~withdraw~~
-  - orders
+  - ~~sell order~~
   - trades
+  - buy order?
   - TODO complete this list (lol)
 
 - database features:

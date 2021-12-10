@@ -155,6 +155,11 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "create_order": {
+            res = await client.createOrder(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }
