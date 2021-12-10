@@ -111,10 +111,8 @@ class Validator:
 
 
 ########################################################################################
-# ENUMS
+# TOKENS
 ########################################################################################
-
-
 class TokenType(Enum):
     ETH = 0
     ERC20 = 1
@@ -123,79 +121,6 @@ class TokenType(Enum):
 
     def __str__(self):
         return self.name
-
-
-########################################################################################
-# BASE
-########################################################################################
-
-
-class BaseParams(BaseModel):
-    pk: str
-    network: str
-    function_name: str
-    # TODO bother later with types and bla
-    gas_limit: Optional[str]
-    gas_price: Optional[str]
-
-
-########################################################################################
-# REGISTRATION & PROJECT & COLLECTION
-########################################################################################
-
-
-class CreateProjectParams(BaseModel):
-    name: str
-    company_name: str
-    contact_email: str
-
-
-class CreateCollectionParams(BaseModel):
-    name: str
-    contract_address: str = Field(alias="contract_addr")
-    owner_public_key: str
-    project_id: int
-    metadata_api_url: Optional[str]
-    description: Optional[str]
-    icon_url: Optional[str]
-    collection_image_url: Optional[str]
-
-    @validator("contract_address")
-    def validate_addr(cls, addr):
-        return Validator.validate_addr(addr)
-
-
-class UpdateCollectionParams(BaseModel):
-    contractAddress: str = Field(alias="contract_addr")
-    name: Optional[str]
-    description: Optional[str]
-    icon_url: Optional[str]
-    metadata_api_url: Optional[str]
-    collection_image_url: Optional[str]
-
-    @validator("contractAddress")
-    def validate_addr(cls, addr):
-        return Validator.validate_addr(addr)
-
-    def dict(self, *args, **kwargs):
-        new_d = {}
-        d = super().dict(*args, **kwargs)
-
-        new_d["contractAddress"] = d.pop("contractAddress")
-        new_d["params"] = d
-
-        return new_d
-
-
-class CreateMetadataSchemaParams(BaseModel):
-    contractAddress: str = Field(alias="contract_addr")
-    # TODO could also define the whole schema as a model
-    metadata: dict
-
-
-########################################################################################
-# TRANSFER
-########################################################################################
 
 
 class ETH(BaseModel):
@@ -258,6 +183,73 @@ class ERC721(BaseModel):
         return new_d
 
 
+########################################################################################
+# BASE
+########################################################################################
+class BaseParams(BaseModel):
+    pk: str
+    network: str
+    function_name: str
+    # TODO bother later with types and bla
+    gas_limit: Optional[str]
+    gas_price: Optional[str]
+
+
+########################################################################################
+# REGISTRATION & PROJECT & COLLECTION
+########################################################################################
+class CreateProjectParams(BaseModel):
+    name: str
+    company_name: str
+    contact_email: str
+
+
+class CreateCollectionParams(BaseModel):
+    name: str
+    contract_address: str = Field(alias="contract_addr")
+    owner_public_key: str
+    project_id: int
+    metadata_api_url: Optional[str]
+    description: Optional[str]
+    icon_url: Optional[str]
+    collection_image_url: Optional[str]
+
+    @validator("contract_address")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+
+class UpdateCollectionParams(BaseModel):
+    contractAddress: str = Field(alias="contract_addr")
+    name: Optional[str]
+    description: Optional[str]
+    icon_url: Optional[str]
+    metadata_api_url: Optional[str]
+    collection_image_url: Optional[str]
+
+    @validator("contractAddress")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    def dict(self, *args, **kwargs):
+        new_d = {}
+        d = super().dict(*args, **kwargs)
+
+        new_d["contractAddress"] = d.pop("contractAddress")
+        new_d["params"] = d
+
+        return new_d
+
+
+class CreateMetadataSchemaParams(BaseModel):
+    contractAddress: str = Field(alias="contract_addr")
+    # TODO could also define the whole schema as a model
+    metadata: dict
+
+
+########################################################################################
+# TRANSFER
+########################################################################################
 class TransferParams(BaseModel):
     sender: str
     receiver: str
@@ -281,8 +273,6 @@ class TransferParams(BaseModel):
 ########################################################################################
 # MINT
 ########################################################################################
-
-
 class Royalty(BaseModel):
     recipient: str
     percentage: Union[float, int]
@@ -326,8 +316,6 @@ class MintParams(BaseModel):
 ########################################################################################
 # BURN
 ########################################################################################
-
-
 class BurnParams(BaseModel):
     sender: str
     token: Strict[Union[ETH, ERC20, ERC721]]
@@ -350,8 +338,6 @@ class BurnParams(BaseModel):
 ########################################################################################
 # WITHDRAW
 ########################################################################################
-
-
 class PrepareWithdrawalParams(BaseModel):
     user: str = Field(alias="sender")
     token: Strict[Union[ETH, ERC20, ERC721]]
@@ -388,8 +374,6 @@ class CompleteWithdrawalParams(BaseModel):
 ########################################################################################
 # TRADING
 ########################################################################################
-
-
 class CreateOrderParams(BaseModel):
     user: str = Field(alias="sender")
     tokenSell: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_sell")
