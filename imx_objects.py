@@ -199,7 +199,7 @@ class CreateMetadataSchemaParams(BaseModel):
 
 
 class ETH(BaseModel):
-    quantity: Union[int, str] = 0
+    quantity: Union[str, int] = 0
     type: str = str(TokenType.ETH)
     decimals: int = 18
     as_wei: bool = False
@@ -219,7 +219,7 @@ class ETH(BaseModel):
 
 class ERC20(BaseModel):
     decimals: int
-    quantity: Strict[Union[str, int]] = 0
+    quantity: Union[str, int] = 0
     type: str = str(TokenType.ERC20)
     as_wei: bool = False
 
@@ -233,8 +233,8 @@ class ERC20(BaseModel):
 
 class ERC721(BaseModel):
     tokenAddress: str = Field(alias="contract_addr")
-    tokenId: Strict[Union[str, int]] = Field(alias="token_id")
-    quantity: Strict[Union[str, int]] = 1
+    tokenId: Union[str, int] = Field(alias="token_id")
+    quantity: Union[str, int] = 1
     type: str = str(TokenType.ERC721)
 
     @validator("quantity")
