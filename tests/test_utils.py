@@ -28,6 +28,13 @@ class TestSafeNumber:
         n = SafeNumber("0.5", decimals=18, as_wei=False).value
         assert n == str(half_eth)
 
+    def test_okay_0_eth(self):
+        n = SafeNumber("0", decimals=18, as_wei=False).value
+        assert n == "0"
+
+        n = SafeNumber(0, decimals=18, as_wei=False).value
+        assert n == "0"
+
     def test_fails_with_float(self):
         with pytest.raises(ValueError) as e:
             SafeNumber(1.0)
