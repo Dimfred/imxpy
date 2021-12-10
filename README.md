@@ -11,7 +11,7 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
     // install all dependencies
     npm install
 
-    // build the typescript files
+    // build the typescript file
     tsc
 
 ## Examples
