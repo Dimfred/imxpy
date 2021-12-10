@@ -226,8 +226,7 @@ class TestWithdrawal:
             print(msg)
             return
 
-        token = ETH()
-        params = CompleteWithdrawalParams(token=token)
+        params = CompleteWithdrawalParams(token=ETH())
         res = client.complete_withdrawal(params)
         res = res.result()
 
