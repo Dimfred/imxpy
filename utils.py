@@ -95,7 +95,7 @@ class SafeNumber:
         if int(before_comma):
             safe_number = before_comma + after_comma + padding
         # happens when a 0 is put in
-        elif not safe_number:
+        elif not before_comma:
             safe_number = "0"
         else:
             # remove leading zeros and append
