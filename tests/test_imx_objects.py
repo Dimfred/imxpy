@@ -57,7 +57,6 @@ class TestTransferParams:
             params = TransferParams(
                 sender=acc1.addr,
                 receiver=acc2.addr,
-                quantity=quantity,
                 token=ERC721(token_id=token_id, contract_addr=acc1.addr),
             )
             assert params.dict() == expected

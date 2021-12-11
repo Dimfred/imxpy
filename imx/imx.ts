@@ -136,7 +136,7 @@ const createErrorMsg = (msg: any) => {
         }
         case "mint": {
             res = await client.mintV2(params);
-            msg = createSuccessMsg(res);
+            msg = createSuccessMsg(res.results);
             break;
         }
         case "burn": {

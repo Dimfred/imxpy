@@ -77,6 +77,23 @@ class IMXDB:
 
         return self._get(url)
 
+    def asset(self, token_id, contract_addr, include_fees=True):
+        params = {"include_fees": True}
+
+        return self._get(self.assets_url / contract_addr / str(token_id), params=params)
+
+    def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
+        if imx_token_id is not None:
+            return self._get(self.mintable_token_url / imx_token_id)
+
+        return self._get(self.mintable_token_url / contract_addr / str(token_id))
+
+    def mints(self, imx_token_id):
+        return self._get(self.mints_url / imx_token_id)
+
+    def claims(self, addr):
+        return self._get(self.rewards_url / addr)
+
     def assets(
         self,
         user,
@@ -124,7 +141,7 @@ class IMXDB:
 
     def _init_urls(self, net):
         if net == "test":
-            self.base = URL("https://api.uat.x.immutable.com")
+            self.base = URL("https://api.ropsten.x.immutable.com")
         elif net == "main":
             self.base = URL("https://api.x.immutable.com")
         else:
@@ -136,6 +153,9 @@ class IMXDB:
         self.transfer_url = urlv1 / "transfers"
         self.balances_url = urlv2 / "balances"
         self.assets_url = urlv1 / "assets"
+        self.mintable_token_url = urlv1 / "mintable-token"
+        self.mints_url = urlv1 / "mints"
+        self.rewards_url = urlv1 / "rewards"
 
     def _get(self, url, params=None):
         res = req.get(url, params=params)

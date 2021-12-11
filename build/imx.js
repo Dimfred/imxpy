@@ -197,7 +197,7 @@ var createErrorMsg = function (msg) {
             case 15: return [4 /*yield*/, client.mintV2(params)];
             case 16:
                 res = _b.sent();
-                msg = createSuccessMsg(res);
+                msg = createSuccessMsg(res.results);
                 return [3 /*break*/, 30];
             case 17: return [4 /*yield*/, client.burn(params)];
             case 18:
