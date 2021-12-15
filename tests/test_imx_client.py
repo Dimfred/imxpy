@@ -236,6 +236,10 @@ class TestWithdrawal:
         # assert res["result"] == acc1.addr
 
 
+class TestDeposit:
+    pass
+
+
 class TestTrading:
     def test_okay_order_sell_and_cancel(
         self, client, acc1, minted_nft_id, contract_addr

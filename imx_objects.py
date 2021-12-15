@@ -142,10 +142,16 @@ class ETH(BaseModel):
 
 
 class ERC20(BaseModel):
-    decimals: int
+    symbol: str
+    tokenAddress: str = Field(alias="contract_addr")
+    decimals: int = 18
     quantity: Union[str, int] = 0
     type: str = str(TokenType.ERC20)
     as_wei: bool = False
+
+    @validator("tokenAddress")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
 
     def dict(self, *args, **kwargs):
         Utils.exclude("as_wei", kwargs)
@@ -336,7 +342,7 @@ class BurnParams(BaseModel):
 
 
 ########################################################################################
-# WITHDRAW
+# WITHDRAW & DEPOSIT
 ########################################################################################
 class PrepareWithdrawalParams(BaseModel):
     user: str = Field(alias="sender")
@@ -367,6 +373,21 @@ class CompleteWithdrawalParams(BaseModel):
     def dict(self, *args, **kwargs):
         d = super().dict(*args, **kwargs)
         d["token"]["data"].pop("quantity")
+
+        return d
+
+
+class DepositParams(BaseModel):
+    user: str = Field(alias="sender")
+    token: Strict[Union[ETH, ERC20, ERC721]]
+
+    @validator("token")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["quantity"] = d["token"]["data"].pop("quantity")
 
         return d
 

@@ -22,15 +22,10 @@ import subprocess as sp
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-import imxpy.utils as utils
 
-# TODO fix me ffs
-try:
-    from .imx_db import IMXDB
-    from .imx_objects import *
-except:
-    from imx_db import IMXDB
-    from imx_objects import *
+from imxpy.imx_db import IMXDB
+from imxpy.imx_objects import *
+from imxpy import utils
 
 
 class IMXClient:
@@ -64,7 +59,6 @@ class IMXClient:
 
     @utils.ensure_pk
     def transfer(self, params: TransferParams, max_retries: int = 1):
-        print(params.dict())
         return self._run_pool("transfer", params, max_retries)
 
     @utils.ensure_pk
@@ -84,6 +78,10 @@ class IMXClient:
         self, params: CompleteWithdrawalParams, max_retries: int = 1
     ):
         return self._run_pool("complete_withdrawal", params, max_retries)
+
+    @utils.ensure_pk
+    def deposit(self, params: DepositParams, max_retries: int = 1):
+        return self._run_pool("deposit", params, max_retries)
 
     @utils.ensure_pk
     def create_order(self, params: CreateOrderParams, max_retries: int = 1):

@@ -20,6 +20,7 @@ import json
 import requests as req
 from urlpath import URL
 
+from imxpy.utils import IMXTime
 from imxpy import utils
 
 
@@ -60,10 +61,10 @@ class IMXDB:
             params["token_address"] = token_address
 
         if min_timestamp is not None:
-            params["min_timestamp"] = utils.timestamp_to_str(min_timestamp)
+            params["min_timestamp"] = IMXTime.to_str(min_timestamp)
 
         if max_timestamp is not None:
-            params["max_timestamp"] = utils.timestamp_to_str(max_timestamp)
+            params["max_timestamp"] = IMXTime.to_str(max_timestamp)
 
         if cursor is not None:
             params["cursor"] = cursor

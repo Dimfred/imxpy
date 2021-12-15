@@ -155,6 +155,11 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "deposit": {
+            res = await client.deposit(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
         case "create_order": {
             res = await client.createOrder(params);
             msg = createSuccessMsg(res);
