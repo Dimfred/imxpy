@@ -14,6 +14,37 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
     // build the typescript file
     tsc
 
+## Known Issues
+
+- With python3.10 `typingx` runs into an error with `Union`, current workaround is currently to use python <= 3.9 an issue has already been opened on their github
+
+## Feature Overview
+
+### Signable
+
+- `registerImx`
+- `createProject`
+- `createCollection`
+- `updateCollection`
+- `addMetadataSchemaToCollection`
+- ~~updateMetadataSchemaByName~~
+- `transfer`
+- `mint`
+- `burn`
+- `prepareWithdrawal`
+- `completeWithdrawal`
+- `deposit`
+- `createOrder`
+- `cancelOrder`
+- `createTrade`
+
+### Database
+
+- `transfers`
+- `balances`
+- TODO more
+
+
 ## Examples
 
     from imxpy import IMXClient
