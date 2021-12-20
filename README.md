@@ -44,7 +44,6 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
 - `balances`
 - TODO more
 
-
 ## Examples
 
     from imxpy import IMXClient
