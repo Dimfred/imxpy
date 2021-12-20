@@ -144,6 +144,43 @@ class TestMint:
 
         assert res["status"] == "success"
 
+    def test_okay_multiple_targets_and_override_global_royalties_v2(
+        self, client, acc1, acc2, acc3, contract_addr
+    ):
+        tid1 = self.random_token_id()
+        tid2 = self.random_token_id()
+        tid3 = self.random_token_id()
+
+        tid1 = self.random_token_id()
+
+        params = MintParams(
+            contract_addr=contract_addr,
+            # royalties=[Royalty(recipient=acc1.addr, percentage=1.0)],
+            targets=[
+                MintTarget(
+                    addr=acc2.addr,
+                    tokens=[
+                        MintableToken(
+                            id=tid1,
+                            blueprint="1",
+                            # tests override global royalties
+                            # royalties=[Royalty(recipient=acc2.addr, percentage=2.0)],
+                        ),
+                        # tests multiple token mints at a time
+                        # MintableToken(id=tid2, blueprint="2"),
+                    ],
+                ),
+                # tests multiple user targets at a time
+                # MintTarget(
+                #     addr=acc3.addr, tokens=[MintableToken(id=tid3, blueprint="3")]
+                # ),
+            ],
+        )
+        res = client.mint2(params, max_retries=1)
+        # res = res.result()
+
+        # assert res["status"] == "success"
+
     def test_fails_unregistered_contract_addr(
         self, client, acc1, unregistered_contract_addr
     ):

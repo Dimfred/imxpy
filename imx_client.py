@@ -18,6 +18,9 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
 import subprocess as sp
+import requests as req
+from binascii import hexlify
+from pprint import pprint
 
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
@@ -62,8 +65,39 @@ class IMXClient:
         return self._run_pool("transfer", params, max_retries)
 
     @utils.ensure_pk
+    def transfer2(self, params: TransferParams, max_retries: int = 1):
+        pass
+
+    @utils.ensure_pk
     def mint(self, params: MintParams, max_retries: int = 1):
         return self._run_pool("mint", params, max_retries)
+
+    @utils.ensure_pk
+    def mint2(self, params: MintParams, max_retries: int = 1):
+        from web3.auto import w3
+        from eth_account.messages import encode_defunct
+
+        msg = encode_defunct(text=params.json())
+        sig = w3.eth.account.sign_message(msg, private_key=self.pk)
+
+        # signature method1
+        sig = f"0x{hexlify(sig).decode('utf-8')}"
+
+        # signature method2
+        r = str(hex(sig.r))[2:]
+        s = str(hex(sig.s))[2:]
+        v = str(hex(sig.v))[2:]
+        sig = f"0x{r}{s}{v}"
+
+        msg_with_sig = params.dict()
+        msg_with_sig[0]["auth_signature"] = sig
+        print()
+        pprint(msg_with_sig)
+
+        res = req.post(
+            "https://api.ropsten.x.immutable.com/v2/mints", json=msg_with_sig
+        )
+        print(res.text)
 
     @utils.ensure_pk
     def burn(self, params: BurnParams, max_retries: int = 1):
