@@ -261,6 +261,9 @@ class TestTrading:
         res = res.result()
 
         assert res["status"] == "success"
+        assert res["result"]["order_id"] == int(order_id)
+        assert not res["result"]["status"]
+
 
     def test_okay_order_buy(self):
         # TODO I think this didn't work for serveral people, just let it here as

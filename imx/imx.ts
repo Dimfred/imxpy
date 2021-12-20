@@ -169,6 +169,13 @@ const createErrorMsg = (msg: any) => {
             // TODO at some point this will be fixed by imx and will
             // (hopefully) error out
             res = await client.cancelOrder(params.order_id)();
+            // TODO dunno whether more params can appear here
+            if (res._tag === "Right") {
+                res = res.right;
+            }
+            else {
+                res = res.left;
+            }
             msg = createSuccessMsg(res);
             break;
         }
