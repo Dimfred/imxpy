@@ -80,14 +80,7 @@ class IMXClient:
         msg = encode_defunct(text=params.json())
         sig = w3.eth.account.sign_message(msg, private_key=self.pk)
 
-        # signature method1
-        sig = f"0x{hexlify(sig).decode('utf-8')}"
-
-        # signature method2
-        r = str(hex(sig.r))[2:]
-        s = str(hex(sig.s))[2:]
-        v = str(hex(sig.v))[2:]
-        sig = f"0x{r}{s}{v}"
+        sig = f"0x{hexlify(sig.signature).decode('utf-8')}"
 
         msg_with_sig = params.dict()
         msg_with_sig[0]["auth_signature"] = sig

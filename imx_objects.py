@@ -289,8 +289,8 @@ class Royalty(BaseModel):
 
 
 class MintableToken(BaseModel):
-    id: str
     blueprint: str
+    id: str
     # local royalties for this token, overrides global royalty config
     royalties: Optional[List[Royalty]]
 
@@ -302,12 +302,14 @@ class MintableToken(BaseModel):
 
 
 class MintTarget(BaseModel):
-    etherKey: str = Field(alias="addr")
+    # etherKey: str = Field(alias="addr")
+    user: str = Field(alias="addr")
     tokens: List[MintableToken]
 
 
 class MintParams(BaseModel):
-    contractAddress: str = Field(alias="contract_addr")
+    # contractAddress: str = Field(alias="contract_addr")
+    contract_address: str = Field(alias="contract_addr")
     users: List[MintTarget] = Field(alias="targets")
     # global royalty config, will get overridden by MintableToken royalties
     royalties: Optional[List[Royalty]]

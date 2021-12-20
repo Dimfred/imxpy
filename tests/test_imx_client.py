@@ -161,7 +161,7 @@ class TestMint:
                     addr=acc2.addr,
                     tokens=[
                         MintableToken(
-                            id=tid1,
+                            id="589455732365931664909180203123",
                             blueprint="1",
                             # tests override global royalties
                             # royalties=[Royalty(recipient=acc2.addr, percentage=2.0)],
