@@ -166,8 +166,9 @@ const createErrorMsg = (msg: any) => {
             break;
         }
         case "cancel_order": {
-            params["starkPublicKey"] = client.starkPublicKey;
-            res = await client.cancelOrder(params);
+            // TODO at some point this will be fixed by imx and will
+            // (hopefully) error out
+            res = await client.cancelOrder(params.order_id)();
             msg = createSuccessMsg(res);
             break;
         }

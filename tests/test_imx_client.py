@@ -244,7 +244,6 @@ class TestTrading:
     def test_okay_order_sell_and_cancel(
         self, client, acc1, minted_nft_id, contract_addr
     ):
-        # imx db takes a bit time after the asset was minted
         params = CreateOrderParams(
             sender=acc1.addr,
             token_sell=ERC721(token_id=minted_nft_id, contract_addr=contract_addr),

@@ -419,6 +419,10 @@ class CreateOrderParams(BaseModel):
 class CancelOrderParams(BaseModel):
     order_id: Union[str, int]
 
+    @validator("order_id")
+    def to_int(cls, sn):
+        return int(sn)
+
 
 class CreateTradeParams(BaseModel):
     orderId: int = Field(alias="order_id")
