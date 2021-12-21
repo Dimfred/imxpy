@@ -119,6 +119,14 @@ class IMXDB:
 
         return self._get(self.assets_url, params)
 
+    def stark_key(self, addr):
+        return self._get(self.users_url / addr)
+
+    def is_registered(self, addr):
+        res = self.stark_key(addr)
+
+        return "accounts" in res
+
     def all_pages(self, func, *args, key=None, **kwargs):
         results = []
 
@@ -157,6 +165,7 @@ class IMXDB:
         self.mintable_token_url = urlv1 / "mintable-token"
         self.mints_url = urlv1 / "mints"
         self.rewards_url = urlv1 / "rewards"
+        self.users_url = urlv1 / "users"
 
     def _get(self, url, params=None):
         res = req.get(url, params=params)

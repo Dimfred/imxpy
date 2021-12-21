@@ -164,3 +164,8 @@ def valid_order_params(client, client2, acc2, contract_addr):
     time.sleep(2)
 
     return (res["result"]["order_id"], token_id)
+
+
+@pytest.fixture
+def unregistered_addr():
+    return "0xd2Bf8229D98716abEA9D22453C5C5613078B2c46"

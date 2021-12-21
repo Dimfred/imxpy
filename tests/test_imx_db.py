@@ -1,3 +1,12 @@
+
+class TestRegistration:
+    def test_okay_is_registered(self, client, acc1):
+        assert client.db.is_registered(acc1.addr)
+
+    def test_fail_is_registered(self, client, unregistered_addr):
+        assert not client.db.is_registered(unregistered_addr)
+
+
 # TODO
 # class TestIMXDB:
 #     def test_return_min_max_timestamp(client):
