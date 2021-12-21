@@ -17,8 +17,8 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from types import new_class
-from typing import Optional, Union, Generator, Callable, Any, List
-from typingx import isinstancex, cast
+from typing import Optional, Union, Generator, Callable, Any, List, cast
+from typingx import isinstancex
 
 from pydantic import BaseModel, Field, validator
 from pydantic.generics import Generic, TypeVar
