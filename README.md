@@ -14,10 +14,6 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
     // build the typescript file
     tsc
 
-## Known Issues
-
-- With python3.10 `typingx` runs into an error with `Union`, current workaround is currently to use python <= 3.9 an issue has already been opened on their github
-
 ## Feature Overview
 
 ### Signable
@@ -42,6 +38,8 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
 
 - `transfers`
 - `balances`
+- `is_registered`
+- `stark_key`
 - TODO more
 
 ## Examples
@@ -64,6 +62,8 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
     client.shutdown()
 
 Other examples on how to use the `client` correctly can be found in `tests/test_imx_client.py`. Tests starting with `test_okay_*`, are meant to show the correct usage of the library, whereas the others show wrong behavior.
+
+## Known Issues
 
 ## TODO
 

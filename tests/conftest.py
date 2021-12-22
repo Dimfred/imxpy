@@ -132,7 +132,6 @@ def mint_params(contract_addr, id_, addr):
 
 @pytest.fixture(scope="function")
 def minted_nft_id(client, acc1, contract_addr):
-
     token_id = random_number()
     params = mint_params(contract_addr, token_id, acc1.addr)
     res = client.mint(params)
