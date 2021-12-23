@@ -1,3 +1,4 @@
+urlpath
 easydict
 pydantic
 typingx
