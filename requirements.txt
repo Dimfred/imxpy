@@ -1,2 +1,3 @@
+easydict
 pydantic
 typingx
