@@ -74,18 +74,32 @@ class IMXClient:
 
     @utils.ensure_pk
     def mint2(self, params: MintParams, max_retries: int = 1):
+        import json
         from web3.auto import w3
-        from eth_account.messages import encode_defunct
+        from eth_account.messages import encode_defunct as encode
+        # from eth_account.messages import encode_structured_data as encode
 
-        msg = encode_defunct(text=params.json())
+        j = params.dict()
+        j = json.dumps(j, separators=(",", ":"))
+
+        print(f"params\n{j}")
+        msg = encode(text=j)
+        print(msg)
         sig = w3.eth.account.sign_message(msg, private_key=self.pk)
+        print(sig)
 
         sig = f"0x{hexlify(sig.signature).decode('utf-8')}"
+        v = sig[-2:]
+        if v == "1b":
+            sig = sig[:-2] + "00"
+        else:
+            sig = sig[:-2] + "01"
+
 
         msg_with_sig = params.dict()
         msg_with_sig[0]["auth_signature"] = sig
         print()
-        pprint(msg_with_sig)
+        print(msg_with_sig)
 
         res = req.post(
             "https://api.ropsten.x.immutable.com/v2/mints", json=msg_with_sig

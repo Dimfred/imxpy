@@ -17,8 +17,8 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from types import new_class
-from typing import Optional, Union, Generator, Callable, Any, List
-from typingx import isinstancex, cast
+from typing import Optional, Union, Generator, Callable, Any, List, cast
+from typingx import isinstancex
 
 from pydantic import BaseModel, Field, validator
 from pydantic.generics import Generic, TypeVar
@@ -309,16 +309,26 @@ class MintTarget(BaseModel):
 
 class MintParams(BaseModel):
     # contractAddress: str = Field(alias="contract_addr")
-    contract_address: str = Field(alias="contract_addr")
     users: List[MintTarget] = Field(alias="targets")
     # global royalty config, will get overridden by MintableToken royalties
     royalties: Optional[List[Royalty]]
+    contract_address: str = Field(alias="contract_addr")
 
     def dict(self, *args, **kwargs):
         if self.royalties is None:
             Utils.exclude("royalties", kwargs)
 
         return [super().dict(*args, **kwargs)]
+        # return [super().dict(*args, **kwargs)]
+        from collections import OrderedDict
+
+        # j = OrderedDict()
+        # j["users"] = res["users"]
+        # j["contract_address"] = res["contract_address"]
+        # j["auth_signature"] = None
+
+        # return [dict(j)]
+        # return
 
 
 ########################################################################################
