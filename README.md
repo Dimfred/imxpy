@@ -16,6 +16,8 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
 
 ## Feature Overview
 
+Fell free to submit any feature requests / proposals through the issues.
+
 ### Signable
 
 - `registerImx`
