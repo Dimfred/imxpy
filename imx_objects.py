@@ -16,14 +16,16 @@
 # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import json
+
 from types import new_class
 from typing import Optional, Union, Generator, Callable, Any, List, cast
 from typingx import isinstancex
 
+from enum import Enum
+
 from pydantic import BaseModel, Field, validator
 from pydantic.generics import Generic, TypeVar
-
-from enum import Enum
 
 from imxpy import utils
 
@@ -109,6 +111,14 @@ class Validator:
         token.quantity = safe_number.value
         return token
 
+########################################################################################
+# Base
+########################################################################################
+class Base(BaseModel):
+    def json(self):
+        return json.dumps(self.dict(), separators=(',', ':'))
+
+
 
 ########################################################################################
 # TOKENS
@@ -123,7 +133,7 @@ class TokenType(Enum):
         return self.name
 
 
-class ETH(BaseModel):
+class ETH(Base):
     quantity: Union[str, int] = 0
     type: str = str(TokenType.ETH)
     decimals: int = 18
@@ -141,7 +151,7 @@ class ETH(BaseModel):
         return new_d
 
 
-class ERC20(BaseModel):
+class ERC20(Base):
     symbol: str
     tokenAddress: str = Field(alias="contract_addr")
     decimals: int = 18
@@ -161,7 +171,7 @@ class ERC20(BaseModel):
         return new_d
 
 
-class ERC721(BaseModel):
+class ERC721(Base):
     tokenAddress: str = Field(alias="contract_addr")
     tokenId: Union[str, int] = Field(alias="token_id")
     quantity: Union[str, int] = 1
@@ -192,7 +202,7 @@ class ERC721(BaseModel):
 ########################################################################################
 # BASE
 ########################################################################################
-class BaseParams(BaseModel):
+class BaseParams(Base):
     pk: str
     network: str
     function_name: str
@@ -204,13 +214,13 @@ class BaseParams(BaseModel):
 ########################################################################################
 # REGISTRATION & PROJECT & COLLECTION
 ########################################################################################
-class CreateProjectParams(BaseModel):
+class CreateProjectParams(Base):
     name: str
     company_name: str
     contact_email: str
 
 
-class CreateCollectionParams(BaseModel):
+class CreateCollectionParams(Base):
     name: str
     contract_address: str = Field(alias="contract_addr")
     owner_public_key: str
@@ -225,7 +235,7 @@ class CreateCollectionParams(BaseModel):
         return Validator.validate_addr(addr)
 
 
-class UpdateCollectionParams(BaseModel):
+class UpdateCollectionParams(Base):
     contractAddress: str = Field(alias="contract_addr")
     name: Optional[str]
     description: Optional[str]
@@ -247,7 +257,7 @@ class UpdateCollectionParams(BaseModel):
         return new_d
 
 
-class CreateMetadataSchemaParams(BaseModel):
+class CreateMetadataSchemaParams(Base):
     contractAddress: str = Field(alias="contract_addr")
     # TODO could also define the whole schema as a model
     metadata: dict
@@ -256,7 +266,7 @@ class CreateMetadataSchemaParams(BaseModel):
 ########################################################################################
 # TRANSFER
 ########################################################################################
-class TransferParams(BaseModel):
+class TransferParams(Base):
     sender: str
     receiver: str
     token: Strict[Union[ETH, ERC721, ERC20]]
@@ -279,7 +289,7 @@ class TransferParams(BaseModel):
 ########################################################################################
 # MINT
 ########################################################################################
-class Royalty(BaseModel):
+class Royalty(Base):
     recipient: str
     percentage: Union[float, int]
 
@@ -288,7 +298,7 @@ class Royalty(BaseModel):
         return Validator.validate_addr(addr)
 
 
-class MintableToken(BaseModel):
+class MintableToken(Base):
     id: str
     blueprint: str
     # local royalties for this token, overrides global royalty config
@@ -301,12 +311,12 @@ class MintableToken(BaseModel):
         return super().dict(*args, **kwargs)
 
 
-class MintTarget(BaseModel):
+class MintTarget(Base):
     etherKey: str = Field(alias="addr")
     tokens: List[MintableToken]
 
 
-class MintParams(BaseModel):
+class MintParams(Base):
     contractAddress: str = Field(alias="contract_addr")
     users: List[MintTarget] = Field(alias="targets")
     # global royalty config, will get overridden by MintableToken royalties
@@ -322,7 +332,7 @@ class MintParams(BaseModel):
 ########################################################################################
 # BURN
 ########################################################################################
-class BurnParams(BaseModel):
+class BurnParams(Base):
     sender: str
     token: Strict[Union[ETH, ERC20, ERC721]]
 
@@ -344,7 +354,7 @@ class BurnParams(BaseModel):
 ########################################################################################
 # WITHDRAW & DEPOSIT
 ########################################################################################
-class PrepareWithdrawalParams(BaseModel):
+class PrepareWithdrawalParams(Base):
     user: str = Field(alias="sender")
     token: Strict[Union[ETH, ERC20, ERC721]]
 
@@ -363,7 +373,7 @@ class PrepareWithdrawalParams(BaseModel):
         return d
 
 
-class CompleteWithdrawalParams(BaseModel):
+class CompleteWithdrawalParams(Base):
     token: Strict[Union[ETH, ERC20, ERC721]]
 
     @validator("token")
@@ -377,7 +387,7 @@ class CompleteWithdrawalParams(BaseModel):
         return d
 
 
-class DepositParams(BaseModel):
+class DepositParams(Base):
     user: str = Field(alias="sender")
     token: Strict[Union[ETH, ERC20, ERC721]]
 
@@ -395,7 +405,7 @@ class DepositParams(BaseModel):
 ########################################################################################
 # TRADING
 ########################################################################################
-class CreateOrderParams(BaseModel):
+class CreateOrderParams(Base):
     user: str = Field(alias="sender")
     tokenSell: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_sell")
     tokenBuy: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_buy")
@@ -416,7 +426,7 @@ class CreateOrderParams(BaseModel):
         return d
 
 
-class CancelOrderParams(BaseModel):
+class CancelOrderParams(Base):
     order_id: Union[str, int]
 
     @validator("order_id")
@@ -424,7 +434,7 @@ class CancelOrderParams(BaseModel):
         return int(sn)
 
 
-class CreateTradeParams(BaseModel):
+class CreateTradeParams(Base):
     orderId: int = Field(alias="order_id")
     user: str = Field(alias="sender")
     tokenSell: Strict[Union[ETH, ERC20, ERC721]] = Field(alias="token_sell")

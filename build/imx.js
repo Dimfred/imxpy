@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.waitForTransaction = exports.CreateIMXClient = void 0;
 var ethers_1 = require("ethers");
 var providers_1 = require("@ethersproject/providers");
 var wallet_1 = require("@ethersproject/wallet");
@@ -54,7 +53,6 @@ var networkParams = {
         registratrionContractAddr: "0x72a06bf2a1CE5e39cBA06c0CAb824960B587d64c"
     }
 };
-// TODO remove export later
 var CreateIMXClient = function (privateKey, network, gasLimit, gasPrice) {
     if (gasLimit === void 0) { gasLimit = ""; }
     if (gasPrice === void 0) { gasPrice = ""; }
@@ -85,32 +83,6 @@ var CreateIMXClient = function (privateKey, network, gasLimit, gasPrice) {
         });
     });
 };
-exports.CreateIMXClient = CreateIMXClient;
-// TODO remove export later
-var waitForTransaction = function (promise) { return __awaiter(void 0, void 0, void 0, function () {
-    var txId, receipt;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, promise];
-            case 1:
-                txId = _a.sent();
-                console.log('Waiting for transaction', {
-                    txId: txId,
-                    etherscanLink: "https://ropsten.etherscan.io/tx/" + txId,
-                    alchemyLink: "https://dashboard.alchemyapi.io/mempool/eth-ropsten/tx/" + txId,
-                });
-                return [4 /*yield*/, provider.waitForTransaction(txId)];
-            case 2:
-                receipt = _a.sent();
-                if (receipt.status === 0) {
-                    throw new Error('Transaction rejected');
-                }
-                console.log('Transaction Mined: ' + receipt.blockNumber);
-                return [2 /*return*/, receipt];
-        }
-    });
-}); };
-exports.waitForTransaction = waitForTransaction;
 var createSuccessMsg = function (msg) {
     return {
         "status": "success",
@@ -130,7 +102,7 @@ var createErrorMsg = function (msg) {
             case 0:
                 baseParams = JSON.parse(process.env.BASE_PARAMS);
                 params = JSON.parse(process.env.PARAMS);
-                return [4 /*yield*/, (0, exports.CreateIMXClient)(baseParams.pk, baseParams.network, baseParams.gas_limit, baseParams.gas_price)];
+                return [4 /*yield*/, CreateIMXClient(baseParams.pk, baseParams.network, baseParams.gas_limit, baseParams.gas_price)];
             case 1:
                 client = _b.sent();
                 _a = baseParams.function_name;

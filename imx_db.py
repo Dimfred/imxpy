@@ -97,8 +97,8 @@ class IMXDB:
 
     def assets(
         self,
-        user,
-        collection,
+        user="",
+        collection="",
         cursor=None,
         order_by="name",
         direction="asc",
@@ -106,13 +106,17 @@ class IMXDB:
         status="imx",
     ):
         params = {
-            "user": user,
-            "collection": collection,
             "order_by": order_by,
             "direction": direction,
             "page_size": page_size,
             "status": status,
         }
+
+        if user:
+            params["user"] = user
+
+        if collection:
+            params["collection"] = collection
 
         if cursor is not None:
             params["cursor"] = cursor
@@ -126,6 +130,48 @@ class IMXDB:
         res = self.stark_key(addr)
 
         return "accounts" in res
+
+    def orders(
+        self,
+        sell_token_addr,
+        sell_token_name="",
+        sell_token_type="ERC721",
+        buy_token_addr="",
+        buy_token_type="",
+        include_fees=True,
+        # asc / desc
+        direction="asc",
+        # timestamp, buy_quantity
+        order_by="timestamp",
+        page_size=100,
+        status="active",
+        cursor=None,
+    ):
+        url = self.urlv1 / "orders"
+
+        params = {
+            "sell_token_address": sell_token_addr,
+            "sell_token_type": sell_token_type,
+            "include_fees": include_fees,
+            "direction": direction,
+            "order_by": order_by,
+            "page_size": page_size,
+            "status": status,
+        }
+
+        if sell_token_name:
+            params["sell_token_name"] = sell_token_name
+
+        if buy_token_addr:
+            params["buy_token_address"] = buy_token_addr
+
+        if buy_token_type:
+            params["buy_token_type"] = buy_token_type
+
+        if cursor is not None:
+            params["cursor"] = cursor
+
+        return self._get(url, params=params)
 
     def all_pages(self, func, *args, key=None, **kwargs):
         results = []
@@ -156,16 +202,16 @@ class IMXDB:
         else:
             raise ValueError(f"Unknown net: '{net}")
 
-        urlv1 = self.base / "v1"
-        urlv2 = self.base / "v2"
+        self.urlv1 = self.base / "v1"
+        self.urlv2 = self.base / "v2"
 
-        self.transfer_url = urlv1 / "transfers"
-        self.balances_url = urlv2 / "balances"
-        self.assets_url = urlv1 / "assets"
-        self.mintable_token_url = urlv1 / "mintable-token"
-        self.mints_url = urlv1 / "mints"
-        self.rewards_url = urlv1 / "rewards"
-        self.users_url = urlv1 / "users"
+        self.transfer_url = self.urlv1 / "transfers"
+        self.balances_url = self.urlv2 / "balances"
+        self.assets_url = self.urlv1 / "assets"
+        self.mintable_token_url = self.urlv1 / "mintable-token"
+        self.mints_url = self.urlv1 / "mints"
+        self.rewards_url = self.urlv1 / "rewards"
+        self.users_url = self.urlv1 / "users"
 
     def _get(self, url, params=None):
         res = req.get(url, params=params)

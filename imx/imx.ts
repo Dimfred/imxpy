@@ -18,8 +18,7 @@ const networkParams = {
     }
 }
 
-// TODO remove export later
-export const CreateIMXClient = async (
+const CreateIMXClient = async (
     privateKey: string,
     network: string,
     gasLimit: string = "",
@@ -45,22 +44,6 @@ export const CreateIMXClient = async (
 
     return client;
 }
-
-// TODO remove export later
-export const waitForTransaction = async (promise: Promise<string>) => {
-    const txId = await promise;
-    console.log('Waiting for transaction', {
-        txId,
-        etherscanLink: `https://ropsten.etherscan.io/tx/${txId}`,
-        alchemyLink: `https://dashboard.alchemyapi.io/mempool/eth-ropsten/tx/${txId}`,
-    });
-    const receipt = await provider.waitForTransaction(txId);
-    if (receipt.status === 0) {
-        throw new Error('Transaction rejected');
-    }
-    console.log('Transaction Mined: ' + receipt.blockNumber);
-    return receipt;
-};
 
 const createSuccessMsg = (msg: any) => {
     return {

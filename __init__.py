@@ -27,3 +27,4 @@ if imxpy_path not in sys.path:
 
 from imxpy.imx_client import IMXClient
 from imxpy.imx_objects import *
+from imxpy.utils import SafeNumber

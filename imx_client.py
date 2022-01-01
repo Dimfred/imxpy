@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 from imxpy.imx_db import IMXDB
 from imxpy.imx_objects import *
 from imxpy import utils
+from imxpy.cmd_factory import CMDFactory
 
 
 class IMXClient:
@@ -116,15 +117,9 @@ class IMXClient:
             pk=self.pk, network=self.net, function_name=function_name
         )
 
-        working_dir = Path(__file__).parent
-        cmd = f"cd {working_dir}; "
-        cmd += f"export BASE_PARAMS='{base_params.json()}'; "
-
-        if params is not None:
-            cmd += f"export PARAMS='{params.json()}'; "
-        else:
-            cmd += "export PARAMS='{}'; "
-        cmd += f"node ./build/imx.js"
+        cmd = CMDFactory.make(base_params, params)
+        # DEBUG
+        print(cmd)
 
         return cmd
 
@@ -135,7 +130,7 @@ class IMXClient:
 
         res = res.stdout.decode()
         # DEBUG whole stdout output
-        # print(res)
+        print(res)
         try:
             res = json.loads(res)
         except Exception as e:
