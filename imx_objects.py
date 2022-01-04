@@ -111,13 +111,13 @@ class Validator:
         token.quantity = safe_number.value
         return token
 
+
 ########################################################################################
 # Base
 ########################################################################################
 class Base(BaseModel):
     def json(self):
-        return json.dumps(self.dict(), separators=(',', ':'))
-
+        return json.dumps(self.dict(), separators=(",", ":"))
 
 
 ########################################################################################
@@ -314,6 +314,10 @@ class MintableToken(Base):
 class MintTarget(Base):
     etherKey: str = Field(alias="addr")
     tokens: List[MintableToken]
+
+    @validator("etherKey")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
 
 
 class MintParams(Base):

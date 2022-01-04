@@ -119,7 +119,7 @@ class IMXClient:
 
         cmd = CMDFactory.make(base_params, params)
         # DEBUG
-        print(cmd)
+        # print(cmd)
 
         return cmd
 
@@ -130,7 +130,7 @@ class IMXClient:
 
         res = res.stdout.decode()
         # DEBUG whole stdout output
-        print(res)
+        # print(res)
         try:
             res = json.loads(res)
         except Exception as e:
