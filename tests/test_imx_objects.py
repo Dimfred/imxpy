@@ -40,7 +40,7 @@ class TestTransferParams:
         # it is okay if this test fails since it is dependent on the order of the dict
         # it is just here for me to check it at least once, that the same stuff comes out
         # of both and json() uses dict()
-        assert params.json() == json.dumps(expected)
+        assert params.json() == json.dumps(expected, separators=(",", ":"))
 
     def test_okay_erc721(self, acc1, acc2):
         expected = {
