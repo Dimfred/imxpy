@@ -10,7 +10,7 @@ class TestApplications:
     def test_okay_list_applications(self, client):
         res = client.db.applications()
 
-        assert res[0]["id"]
+        assert res["result"][0]["id"]
 
     def test_okay_application_details(self, client):
         gog_id = "12f2d631-db48-8891-350c-c74647bb5b7f"
@@ -34,6 +34,43 @@ class TestAssets:
         res = client.db.asset(token_id, contract_addr)
 
         assert res["token_address"]
+
+
+class TestPagination:
+    def test_okay_pagination_all_transactions_distinct(self, client):
+        from utils import paginate
+
+        prev = ""
+        for counter, res in enumerate(
+            paginate(
+                client.db.transfers,
+                min_timestamp="2021-12-12T13:24:52.0Z",
+                max_timestamp="2021-12-12T13:24:53.987539Z",
+                page_size=1,
+            )
+        ):
+            if counter == 3:
+                break
+
+            cur = res["result"][0]["transaction_id"]
+            assert cur != prev
+            prev = cur
+
+    def test_okay_all_pages(self, client, acc1):
+        from utils import all_pages
+
+        res = all_pages(
+            client.db.transfers,
+            sender=acc1.addr,
+            page_size=1,
+            min_timestamp="2021-12-12T13:24:52.0Z",
+            max_timestamp="2021-12-12T13:24:53.987539Z",
+        )
+
+        txids = [r["transaction_id"] for r in res]
+        assert len(txids) == 5
+        # all distinct
+        assert len(txids) == len(set(txids))
 
 
 class TestBalances:
@@ -106,16 +143,17 @@ class TestTransfers:
         assert res["transaction_id"] == 50314
 
 
-class TestWithdrawals:
-    def test_okay_list_withdrawals(self, client):
-        res = client.db.withdrawals()
-        print(res)
-        # assert
+# class TestWithdrawals:
+#     def test_okay_list_withdrawals(self, client):
+#         res = client.db.withdrawals()
+#         print(res)
+#         # assert
 
-    # def test_okay_withdrawal_details(self, client):
-    #     res = client.db.withdrawal()
+# def test_okay_withdrawal_details(self, client):
+#     res = client.db.withdrawal()
 
-    #     assert res[""] ==
+#     assert res[""] ==
+
 
 # TODO not working?
 # class TestSnapshot:
@@ -123,6 +161,7 @@ class TestWithdrawals:
 #         res = mainnet_client.db.snapshot(gods_unchained_addr)
 
 #         print(res)
+
 
 class TestTokens:
     def test_okay_list_tokens(self, client):

@@ -234,27 +234,6 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "trades", params=params)
 
-    def all_pages(self, func, *args, key=None, **kwargs):
-        results = []
-
-        cursor = ""
-        while True:
-            res = func(*args, **kwargs, cursor=cursor)
-            cursor = res["cursor"]
-            res = res["result"]
-            if res is None:
-                break
-
-            results.extend(res)
-
-            if not cursor:
-                break
-
-        if key is not None:
-            results = utils.make_unique(results, key=key)
-
-        return results
-
     def _make_params(self, locals_):
         del locals_["self"]
 

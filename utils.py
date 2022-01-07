@@ -33,6 +33,32 @@ def ensure_pk(func):
     return deco
 
 
+def paginate(func, *args, **kwargs):
+    cursor = ""
+    while True:
+        res = func(*args, **kwargs, cursor=cursor)
+        cursor = res["cursor"]
+        if res is None:
+            break
+
+        yield res
+
+        if not cursor:
+            break
+
+
+def all_pages(func, *args, key=None, **kwargs):
+    results = []
+    for res in paginate(func, *args, **kwargs):
+        res = res["result"]
+        results.extend(res)
+
+    if key is not None:
+        results = make_unique(results, key=key)
+
+    return results
+
+
 def make_unique(iterable, key=None):
     keys = set()
     idxs_to_remove = []
