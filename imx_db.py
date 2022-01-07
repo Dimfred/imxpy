@@ -41,7 +41,9 @@ class IMXDB:
     def application(self, id):
         return self._get(self.urlv1 / "applications" / id)
 
-    def applications(self, order_by="name", direction="asc", page_size=100, cursor=""):
+    def applications(
+        self, *, order_by="name", direction="asc", page_size=100, cursor=""
+    ):
         params = self._make_params(locals())
         return self._get(self.urlv1 / "applications", params=params)
 
@@ -54,6 +56,7 @@ class IMXDB:
 
     def assets(
         self,
+        *,
         user="",
         collection="",
         name="",
@@ -83,12 +86,18 @@ class IMXDB:
         return self._get(self.urlv1 / "collections" / contract_addr)
 
     def collections(
-        self, blacklist="", order_by="name", direction="asc", page_size=100, cursor=""
+        self,
+        *,
+        blacklist="",
+        order_by="name",
+        direction="asc",
+        page_size=100,
+        cursor="",
     ):
         params = self._make_params(locals())
         return self._get(self.urlv1 / "collections", params=params)
 
-    def collection_filters(self, contract_addr, page_size=100, next_page_token=""):
+    def collection_filters(self, contract_addr, *, page_size=100, next_page_token=""):
         params = {"page_size": page_size, "next_page_token": next_page_token}
         return self._get(
             self.urlv1 / "collections" / contract_addr / "filters", params=params
@@ -102,6 +111,7 @@ class IMXDB:
 
     def deposits(
         self,
+        *,
         user="",
         status="",
         token_type="",
@@ -136,6 +146,7 @@ class IMXDB:
 
     def orders(
         self,
+        *,
         user="",
         sell_token_addr="",
         sell_token_type="",
@@ -183,6 +194,7 @@ class IMXDB:
 
     def transfers(
         self,
+        *,
         sender="",
         receiver="",
         # order_by="timestamp",
@@ -218,6 +230,7 @@ class IMXDB:
 
     def trades(
         self,
+        *,
         party_a_token_type="",
         party_a_token_addr="",
         party_a_token_id="",
