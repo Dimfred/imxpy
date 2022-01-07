@@ -168,6 +168,9 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "orders", params=params)
 
+    def transfer(self, id):
+        return self._get(self.urlv1 / "transfers" / str(id))
+
     def transfers(
         self,
         sender="",
