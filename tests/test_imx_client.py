@@ -4,9 +4,19 @@ import time
 
 
 class TestUtility:
+    def test_okay_sign_msg(self, client):
+        params = SignMsgParams(msg="{'test':'test'")
+        res = client.sign_msg(params)
+        res = res.result()
+
+        # TODO actually thats not okay currently it returns only
+        # success but not the signed message
+        assert res["status"] == "success"
+
     def test_okay_user_registered(self, client):
         res = client.register()
         res = res.result()
+
         assert res["status"] == "success"
 
     def test_okay_project_created(self, client):
@@ -237,7 +247,14 @@ class TestWithdrawal:
 
 
 class TestDeposit:
-    pass
+    def test_okay_deposit(self):
+        pass
+
+    def test_okay_depostit_cancel(self):
+        pass
+
+    def test_okay_deposit_reclaim(self):
+        pass
 
 
 class TestTrading:

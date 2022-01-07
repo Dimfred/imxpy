@@ -73,6 +73,11 @@ const createErrorMsg = (msg: any) => {
 
     let res, msg;
     switch (baseParams.function_name) {
+        case "sign_msg": {
+            res = await client.signMessage(params.msg);
+            msg = createSuccessMsg(res);
+            break;
+        }
         case "register": {
             res = await client.registerImx({
                 etherKey: client.address.toLowerCase(),
@@ -141,6 +146,14 @@ const createErrorMsg = (msg: any) => {
         case "deposit": {
             res = await client.deposit(params);
             msg = createSuccessMsg(res);
+            break;
+        }
+        case "deposit_cancel": {
+            throw new Error("deposit_cancel not implemented");
+            break;
+        }
+        case "deposit_reclaim": {
+            throw new Error("deposit_reclaim not implemented");
             break;
         }
         case "create_order": {

@@ -37,6 +37,10 @@ class IMXClient:
         self.pool = ThreadPoolExecutor(n_workers)
 
     @utils.ensure_pk
+    def sign_msg(self, params: SignMsgParams, max_retries: int = 1):
+        return self._run_pool("sign_msg", params, max_retries)
+
+    @utils.ensure_pk
     def register(self, max_retries: int = 1):
         return self._run_pool("register", None, max_retries)
 

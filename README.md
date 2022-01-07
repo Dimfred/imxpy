@@ -43,7 +43,7 @@ Fell free to submit any feature requests / proposals through the issues.
 
 - [x] `register`
 - [x] `approveNFT`
-- [ ] `approveERC20`
+- [x] `approveERC20`
 - [x] `deposit`
 - [ ] `depositCancel`
 - [ ] `depositReclaim`
@@ -51,7 +51,7 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `completeWithdrawal`
 - [x] `transfer`
 - [x] `burn`
-- [ ] `signMessage`
+- [x] `signMessage` (it is there, but IMX currently just returns a success)
 - [x] `mint`
 - [x] `createOrder`
 - [x] `cancelOrder`
