@@ -42,7 +42,7 @@ Fell free to submit any feature requests / proposals through the issues.
 ### Signable
 
 - [x] `register`
-- [ ] `approveNFT`
+- [x] `approveNFT`
 - [ ] `approveERC20`
 - [x] `deposit`
 - [ ] `depositCancel`

@@ -100,6 +100,10 @@ class IMXClient:
     def approve_nft(self, params: ApproveNFTParams, max_retries: int = 1):
         return self._run_pool("approve_nft", params, max_retries)
 
+    @utils.ensure_pk
+    def approve_erc20(self, params: ApproveERC20Params, max_retries: int = 1):
+        return self._run_pool("approve_erc20", params, max_retries)
+
     def wait(self):
         self.pool.shutdown()
 

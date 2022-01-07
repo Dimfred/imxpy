@@ -170,6 +170,13 @@ const createErrorMsg = (msg: any) => {
         case "approve_nft": {
             res = await client.approveNFT(params);
             msg = createSuccessMsg(res);
+            break;
+        }
+        case "approve_erc20": {
+            params.amount = BigNumber.from(params.amount);
+            res = await client.approveERC20(params);
+            msg = createSuccessMsg(res);
+            break;
         }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);

@@ -294,4 +294,19 @@ class TestApprovals:
             res = client.approve_nft(params)
             res = res.result()
         except:
-            assert False, f"Failed to approve: {res}"
+            assert False, f"Failed to approve NFT: {res}"
+
+    def test_okay_erc20(self, client):
+        params = ApproveERC20Params(
+            token=ERC20(
+                quantity="0.01",
+                contract_addr="0xccc8cb5229b0ac8069c51fd58367fd1e622afd97",
+                decimals=18,
+                as_wei=False,
+            )
+        )
+        res = client.approve_erc20(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+        assert res["result"]

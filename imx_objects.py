@@ -152,7 +152,7 @@ class ETH(Base):
 
 
 class ERC20(Base):
-    symbol: str
+    symbol: str = ""
     tokenAddress: str = Field(alias="contract_addr")
     decimals: int = 18
     quantity: Union[str, int] = 0
@@ -474,3 +474,21 @@ class ApproveNFTParams(Base):
     @validator("tokenId")
     def to_str(cls, token_id):
         return str(token_id)
+
+
+class ApproveERC20Params(Base):
+    token: ERC20
+
+    @validator("token")
+    def validate_token(cls, token):
+        return Validator.validate_token(token)
+
+    def dict(self):
+        params = self.token.dict()
+        params = params["data"]
+        del params["symbol"]
+        del params["decimals"]
+        amount = params.pop("quantity")
+        params["amount"] = amount
+
+        return params
