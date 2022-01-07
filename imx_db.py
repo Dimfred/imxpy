@@ -122,6 +122,52 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "deposits", params=params)
 
+    def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
+        if imx_token_id is not None:
+            return self._get(self.urlv1 / "mintable-token" / imx_token_id)
+
+        return self._get(self.urlv1 / "mintable-token" / contract_addr / str(token_id))
+
+    def mints(self, imx_token_id):
+        return self._get(self.urlv1 / "mints" / imx_token_id)
+
+    def order(self, order_id):
+        return self._get(self.urlv1 / "orders" / str(order_id))
+
+    def orders(
+        self,
+        user="",
+        sell_token_addr="",
+        sell_token_type="",
+        sell_token_name="",
+        sell_token_id="",
+        sell_asset_id="",
+        sell_min_quantity="",
+        sell_max_quantity="",
+        sell_metadata="",
+        buy_token_addr="",
+        buy_token_type="",
+        buy_token_name="",
+        buy_token_id="",
+        buy_asset_id="",
+        buy_min_quantity="",
+        buy_max_quantity="",
+        buy_metadata="",
+        include_fees=True,
+        # asc / desc
+        direction="asc",
+        updated_min_timestamp="",
+        updated_max_timestamp="",
+        min_timestamp="",
+        max_timestamp="",
+        order_by="timestamp",
+        status="active",
+        page_size=100,
+        cursor="",
+    ):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "orders", params=params)
+
     def transfers(
         self,
         sender="",
@@ -139,15 +185,6 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "transfers", params=params)
 
-    def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
-        if imx_token_id is not None:
-            return self._get(self.urlv1 / "mintable-token" / imx_token_id)
-
-        return self._get(self.urlv1 / "mintable-token" / contract_addr / str(token_id))
-
-    def mints(self, imx_token_id):
-        return self._get(self.urlv1 / "mints" / imx_token_id)
-
     def claims(self, addr):
         return self._get(self.urlv1 / "rewards" / addr)
 
@@ -157,25 +194,6 @@ class IMXDB:
     def is_registered(self, addr):
         res = self.stark_key(addr)
         return "accounts" in res
-
-    def orders(
-        self,
-        sell_token_addr="",
-        sell_token_name="",
-        sell_token_type="ERC721",
-        buy_token_addr="",
-        buy_token_type="",
-        include_fees=True,
-        # asc / desc
-        direction="asc",
-        # timestamp, buy_quantity
-        order_by="timestamp",
-        status="active",
-        page_size=100,
-        cursor="",
-    ):
-        params = self._make_params(locals())
-        return self._get(self.urlv1 / "orders", params=params)
 
     def trades(
         self,

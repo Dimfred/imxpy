@@ -88,9 +88,9 @@ Fell free to submit any feature requests / proposals through the issues.
   - [x] `mintable_token_with_addr`
   - [x] `mints`
   - [x] `mints details`
-- [ ] `orders
+- [x] `orders
   - [x] `list`
-  - [ ] `details`
+  - [x] `details`
 - [x] `claims
 - [x] `starkkeys`
 - [x] `transfers`

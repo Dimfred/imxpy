@@ -82,6 +82,18 @@ class TestDeposits:
         assert res["transaction_id"] == 49905
 
 
+class TestOrders:
+    def test_okay_list_orders(self, client):
+        res = client.db.orders()
+
+        assert res["result"][0]["order_id"]
+
+    def test_okay_order_details(self, client):
+        res = client.db.order(752)
+
+        assert res["order_id"] == 752
+
+
 # TODO
 # class TestIMXDB:
 #     def test_return_min_max_timestamp(client):
