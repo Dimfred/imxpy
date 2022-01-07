@@ -10,7 +10,7 @@ class TestApplications:
     def test_okay_list_applications(self, client):
         res = client.db.applications()
 
-        assert res
+        assert res[0]["id"]
 
     def test_okay_application_details(self, client):
         gog_id = "12f2d631-db48-8891-350c-c74647bb5b7f"
@@ -19,6 +19,23 @@ class TestApplications:
         assert res["id"] == gog_id
         assert res["name"] == "Guilds Of Guardians"
         assert res["created_at"] == "2021-07-02T02:54:02.592523Z"
+
+
+class TestAssets:
+    def test_okay_list_assets(self, client):
+        res = client.db.assets(page_size=10)
+
+        assert res["result"][0]["token_address"]
+
+    def test_okay_asset_details(self, client):
+        token_id = "1081884248542"
+        contract_addr = "0x21a8eba2687c99f5f67093b019bd8d9252b47638"
+
+        res = client.db.asset(token_id, contract_addr)
+
+        assert res["token_address"]
+
+
 
 
 

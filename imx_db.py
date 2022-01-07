@@ -47,14 +47,23 @@ class IMXDB:
     def asset(self, token_id, contract_addr, include_fees=True):
         params = {"include_fees": True}
 
-        return self._get(self.assets_url / contract_addr / str(token_id), params=params)
+        return self._get(
+            self.urlv1 / "assets" / contract_addr / str(token_id), params=params
+        )
 
     def assets(
         self,
         user="",
         collection="",
-        order_by="name",
+        name="",
+        metadata="",
+        sell_orders=True,
+        buy_orders=True,
+        include_fees=True,
+        updated_min_timestamp="",
+        updated_max_timestamp="",
         status="imx",
+        order_by="name",
         direction="asc",
         page_size=100,
         cursor="",

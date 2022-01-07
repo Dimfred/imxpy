@@ -68,9 +68,9 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `applications`
   - [x] `list`
   - [x] `details`
-- [ ] `assets`
+- [x] `assets`
   - [x] `list`
-  - [ ] `details`
+  - [x] `details`
 - [ ] `balances`
   - [ ] `wei balance`
   - [x] `list`
