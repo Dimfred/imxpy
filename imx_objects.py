@@ -189,7 +189,7 @@ class ERC721(Base):
         return Validator.validate_addr(addr)
 
     @validator("tokenId")
-    def as_str(cls, token_id):
+    def to_str(cls, token_id):
         return str(token_id)
 
     def dict(self, *args, **kwargs):
@@ -458,3 +458,19 @@ class CreateTradeParams(Base):
         d["amountBuy"] = d["tokenBuy"]["data"].pop("quantity")
 
         return d
+
+
+########################################################################################
+# APPROVING
+########################################################################################
+class ApproveNFTParams(Base):
+    tokenAddress: str = Field(alias="contract_addr")
+    tokenId: Union[str, int] = Field(alias="token_id")
+
+    @validator("tokenAddress")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    @validator("tokenId")
+    def to_str(cls, token_id):
+        return str(token_id)

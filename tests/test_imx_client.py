@@ -283,3 +283,15 @@ class TestTrading:
 
         assert res["status"] == "success"
         assert res["result"]["trade_id"]
+
+
+class TestApprovals:
+    def test_okay_nft(self, client, minted_nft_id, contract_addr):
+        try:
+            params = ApproveNFTParams(
+                token_id=minted_nft_id, contract_addr=contract_addr
+            )
+            res = client.approve_nft(params)
+            res = res.result()
+        except:
+            assert False, f"Failed to approve: {res}"

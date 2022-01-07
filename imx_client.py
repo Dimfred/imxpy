@@ -96,6 +96,10 @@ class IMXClient:
     def create_trade(self, params: CreateTradeParams, max_retries: int = 1):
         return self._run_pool("create_trade", params, max_retries)
 
+    @utils.ensure_pk
+    def approve_nft(self, params: ApproveNFTParams, max_retries: int = 1):
+        return self._run_pool("approve_nft", params, max_retries)
+
     def wait(self):
         self.pool.shutdown()
 

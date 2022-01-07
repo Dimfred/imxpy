@@ -167,6 +167,10 @@ const createErrorMsg = (msg: any) => {
             msg = createSuccessMsg(res);
             break;
         }
+        case "approve_nft": {
+            res = await client.approveNFT(params);
+            msg = createSuccessMsg(res);
+        }
         default: {
             throw new Error(`Invalid method name: '${baseParams.method_name}'`);
         }
