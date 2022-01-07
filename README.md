@@ -74,7 +74,7 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `balances`
   - [x] `list`
   - [x] `token balance`
-- [ ] `TLV Info`
+- [ ] `TLV Info` // seems to be version one and replaced by claims
 - [ ] `collections`
   - [ ] `list`
   - [ ] `details`

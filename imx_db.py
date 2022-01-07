@@ -95,7 +95,6 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "transfers", params=params)
 
-
     def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
         if imx_token_id is not None:
             return self._get(self.urlv1 / "mintable-token" / imx_token_id)
