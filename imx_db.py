@@ -37,6 +37,31 @@ class IMXDB:
         self.urlv1 = self.base / "v1"
         self.urlv2 = self.base / "v2"
 
+    def application(self, id):
+        return self._get(self.urlv1 / "applications" / id)
+
+    def applications(self, order_by="name", direction="asc", page_size=100, cursor=""):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "applications", params=params)
+
+    def asset(self, token_id, contract_addr, include_fees=True):
+        params = {"include_fees": True}
+
+        return self._get(self.assets_url / contract_addr / str(token_id), params=params)
+
+    def assets(
+        self,
+        user="",
+        collection="",
+        order_by="name",
+        status="imx",
+        direction="asc",
+        page_size=100,
+        cursor="",
+    ):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "assets", params=params)
+
     def transfers(
         self,
         sender="",
@@ -61,11 +86,6 @@ class IMXDB:
 
         return self._get(url)
 
-    def asset(self, token_id, contract_addr, include_fees=True):
-        params = {"include_fees": True}
-
-        return self._get(self.assets_url / contract_addr / str(token_id), params=params)
-
     def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
         if imx_token_id is not None:
             return self._get(self.urlv1 / "mintable-token" / imx_token_id)
@@ -77,19 +97,6 @@ class IMXDB:
 
     def claims(self, addr):
         return self._get(self.urlv1 / "rewards" / addr)
-
-    def assets(
-        self,
-        user="",
-        collection="",
-        order_by="name",
-        direction="asc",
-        status="imx",
-        page_size=100,
-        cursor="",
-    ):
-        params = self._make_params(locals())
-        return self._get(self.urlv1 / "assets", params=params)
 
     def stark_key(self, addr):
         return self._get(self.urlv1 / "users" / addr)
@@ -159,7 +166,7 @@ class IMXDB:
     def _make_params(self, locals_):
         del locals_["self"]
 
-        for k, v in locals_:
+        for k, v in list(locals_.items()):
             if k.endswith("addr"):
                 del locals_[k]
                 new_k = k.replace("addr", "address")

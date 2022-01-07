@@ -65,9 +65,9 @@ Fell free to submit any feature requests / proposals through the issues.
 
 ### Database
 
-- [ ] `applications`
-  - [ ] `list`
-  - [ ] `details`
+- [x] `applications`
+  - [x] `list`
+  - [x] `details`
 - [ ] `assets`
   - [x] `list`
   - [ ] `details`

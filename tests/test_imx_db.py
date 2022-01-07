@@ -1,10 +1,25 @@
-
 class TestRegistration:
     def test_okay_is_registered(self, client, acc1):
         assert client.db.is_registered(acc1.addr)
 
     def test_fail_is_registered(self, client, unregistered_addr):
         assert not client.db.is_registered(unregistered_addr)
+
+
+class TestApplications:
+    def test_okay_list_applications(self, client):
+        res = client.db.applications()
+
+        assert res
+
+    def test_okay_application_details(self, client):
+        gog_id = "12f2d631-db48-8891-350c-c74647bb5b7f"
+        res = client.db.application(gog_id)
+
+        assert res["id"] == gog_id
+        assert res["name"] == "Guilds Of Guardians"
+        assert res["created_at"] == "2021-07-02T02:54:02.592523Z"
+
 
 
 # TODO
