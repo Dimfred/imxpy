@@ -17,6 +17,7 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
+from pydantic.typing import new_type_supertype
 import requests as req
 import datetime as dt
 from urlpath import URL
@@ -77,6 +78,49 @@ class IMXDB:
             return self._get(url / token_addr)
 
         return self._get(url)
+
+    def collection(self, contract_addr):
+        return self._get(self.urlv1 / "collections" / contract_addr)
+
+    def collections(
+        self, blacklist="", order_by="name", direction="asc", page_size=100, cursor=""
+    ):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "collections", params=params)
+
+    def collection_filters(self, contract_addr, page_size=100, next_page_token=""):
+        params = {"page_size": page_size, "next_page_token": next_page_token}
+        return self._get(
+            self.urlv1 / "collections" / contract_addr / "filters", params=params
+        )
+
+    def collection_metadata_schema(self, contract_addr):
+        return self._get(self.urlv1 / "collections" / contract_addr / "metadata-schema")
+
+    def deposit(self, id):
+        return self._get(self.urlv1 / "deposits" / str(id))
+
+    def deposits(
+        self,
+        user="",
+        status="",
+        token_type="",
+        token_id="",
+        asset_id="",
+        token_address="",
+        token_name="",
+        min_quantity="",
+        max_quantity="",
+        metadata="",
+        order_by="",
+        direction="asc",
+        min_timestamp="",
+        max_timestamp="",
+        page_size=100,
+        cursor="",
+    ):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "deposits", params=params)
 
     def transfers(
         self,

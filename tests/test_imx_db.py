@@ -48,6 +48,40 @@ class TestBalances:
         assert res["balance"] == "0"
 
 
+class TestCollections:
+    def test_okay_list_collections(self, client):
+        res = client.db.collections()
+
+        assert res["result"][0]["address"]
+
+    def test_okay_collection_details(self, client, contract_addr):
+        res = client.db.collection(contract_addr)
+
+        assert res["project_id"] == 864
+
+    def test_okay_collection_filters(self, mainnet_client, gods_unchained_addr):
+        res = mainnet_client.db.collection_filters(gods_unchained_addr)
+
+        assert res
+
+    def test_okay_collection_metadata_schema(self, client, contract_addr):
+        res = client.db.collection_metadata_schema(contract_addr)
+
+        assert any(item["name"] == "test" for item in res)
+
+
+class TestDeposits:
+    def test_okay_list_deposits(self, client):
+        res = client.db.deposits()
+
+        assert res["result"][0]["transaction_id"]
+
+    def test_okay_deposit_details(self, client):
+        res = client.db.deposit(49905)
+
+        assert res["transaction_id"] == 49905
+
+
 # TODO
 # class TestIMXDB:
 #     def test_return_min_max_timestamp(client):

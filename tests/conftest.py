@@ -18,6 +18,7 @@ def random_number():
 
     return random.randint(0, 100000000000000000000000000000000000)
 
+
 @pytest.fixture
 def random_str():
     return str(random_number())
@@ -63,6 +64,11 @@ def half_eth(one_eth):
 @pytest.fixture(scope="function")
 def client(acc1):
     return IMXClient("test", pk=acc1.pk)
+
+
+@pytest.fixture(scope="function")
+def mainnet_client():
+    return IMXClient("main")
 
 
 @pytest.fixture(scope="function")
@@ -173,6 +179,12 @@ def valid_order_params(client, client2, acc2, contract_addr):
 def unregistered_addr():
     return "0xd2Bf8229D98716abEA9D22453C5C5613078B2c46"
 
+
 @pytest.fixture
 def erc20_contract_addr():
     return "0x4c04c39fb6d2b356ae8b06c47843576e32a1963e"
+
+
+@pytest.fixture
+def gods_unchained_addr():
+    return "0xacb3c6a43d15b907e8433077b6d38ae40936fe2c"

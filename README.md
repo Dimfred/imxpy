@@ -75,14 +75,14 @@ Fell free to submit any feature requests / proposals through the issues.
   - [x] `list`
   - [x] `token balance`
 - [ ] `TLV Info` // seems to be version one and replaced by claims
-- [ ] `collections`
-  - [ ] `list`
-  - [ ] `details`
-  - [ ] `filters`
-  - [ ] `metadataSchema`
-- [ ] `depostis`
-  - [ ] `list`
-  - [ ] `details`
+- [x] `collections`
+  - [x] `list`
+  - [x] `details`
+  - [x] `filters`
+  - [x] `metadataSchema`
+- [x] `depostis`
+  - [x] `list`
+  - [x] `details`
 - [x] `mints`
   - [x] `mintable_token`
   - [x] `mintable_token_with_addr`
