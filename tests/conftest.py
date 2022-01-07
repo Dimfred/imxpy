@@ -188,3 +188,7 @@ def erc20_contract_addr():
 @pytest.fixture
 def gods_unchained_addr():
     return "0xacb3c6a43d15b907e8433077b6d38ae40936fe2c"
+
+@pytest.fixture
+def gods_addr():
+    return "0xccc8cb5229b0ac8069c51fd58367fd1e622afd97"

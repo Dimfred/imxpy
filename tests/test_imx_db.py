@@ -104,3 +104,33 @@ class TestTransfers:
         res = client.db.transfer(50314)
 
         assert res["transaction_id"] == 50314
+
+
+class TestWithdrawals:
+    def test_okay_list_withdrawals(self, client):
+        res = client.db.withdrawals()
+        print(res)
+        # assert
+
+    # def test_okay_withdrawal_details(self, client):
+    #     res = client.db.withdrawal()
+
+    #     assert res[""] ==
+
+# TODO not working?
+# class TestSnapshot:
+#     def test_okay_snapshot(self, mainnet_client, gods_unchained_addr):
+#         res = mainnet_client.db.snapshot(gods_unchained_addr)
+
+#         print(res)
+
+class TestTokens:
+    def test_okay_list_tokens(self, client):
+        res = client.db.tokens()
+
+        assert res["result"][0]["name"]
+
+    def test_okay_token_details(self, client):
+        res = client.db.token("0x4c04c39fb6d2b356ae8b06c47843576e32a1963e")
+
+        assert res["symbol"] == "GODS"

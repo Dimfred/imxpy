@@ -168,6 +168,16 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "orders", params=params)
 
+    def claims(self, addr):
+        return self._get(self.urlv1 / "rewards" / addr)
+
+    def stark_key(self, addr):
+        return self._get(self.urlv1 / "users" / addr)
+
+    def is_registered(self, addr):
+        res = self.stark_key(addr)
+        return "accounts" in res
+
     def transfer(self, id):
         return self._get(self.urlv1 / "transfers" / str(id))
 
@@ -188,15 +198,23 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "transfers", params=params)
 
-    def claims(self, addr):
-        return self._get(self.urlv1 / "rewards" / addr)
+    def withdrawal(self, id):
+        return self._get(self.urlv1 / "withdrawals" / str(id))
 
-    def stark_key(self, addr):
-        return self._get(self.urlv1 / "users" / addr)
+    # def withdrawals(self, *)
 
-    def is_registered(self, addr):
-        res = self.stark_key(addr)
-        return "accounts" in res
+    def snapshot(self, contract_addr, page_size=100, cursor=""):
+        params = {"page_size": page_size, "cursor": cursor}
+        return self._get(
+            self.urlv1 / "snapshot" / "balances" / contract_addr, params=params
+        )
+
+    def token(self, token_addr=""):
+        return self._get(self.urlv1 / "tokens" / token_addr)
+
+    def tokens(self, addr="", symbols=""):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "tokens", params=params)
 
     def trades(
         self,

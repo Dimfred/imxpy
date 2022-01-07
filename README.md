@@ -94,13 +94,15 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `claims
 - [x] `starkkeys`
 - [x] `transfers`
+  - [x] `list`
+  - [x] `details`
 - [ ] `withdrawals`
   - [ ] `list`
   - [ ] `details`
 - [ ] `snapshot`
-- [ ] `tokens`
-  - [ ] `list`
-  - [ ] `details`
+- [x] `tokens`
+  - [x] `list`
+  - [x] `details`
 - [x] `trades`
   - [x] `list`
   - [x] `details`
