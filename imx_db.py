@@ -18,6 +18,7 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import json
 import requests as req
+import datetime as dt
 from urlpath import URL
 
 from imxpy.utils import IMXTime
@@ -26,53 +27,35 @@ from imxpy import utils
 
 class IMXDB:
     def __init__(self, net):
-        self._init_urls(net)
+        if net == "test":
+            self.base = URL("https://api.ropsten.x.immutable.com")
+        elif net == "main":
+            self.base = URL("https://api.x.immutable.com")
+        else:
+            raise ValueError(f"Unknown net: '{net}")
+
+        self.urlv1 = self.base / "v1"
+        self.urlv2 = self.base / "v2"
 
     def transfers(
         self,
         sender=None,
         receiver=None,
-        page_size=10000000000,
         # order_by="timestamp",
         direction="asc",
         token_type="ETH",
         token_id=None,
-        token_address=None,
+        token_addr=None,
         min_timestamp=None,
         max_timestamp=None,
+        page_size=100,
         cursor=None,
     ):
-        params = {
-            "page_size": page_size,
-            # "order_by": order_by,
-            "direction": direction,
-            "token_type": token_type,
-        }
-        if sender is not None:
-            params["user"] = sender
-
-        if receiver is not None:
-            params["receiver"] = receiver
-
-        if token_id is not None:
-            params["token_id"] = token_id
-
-        if token_address is not None:
-            params["token_address"] = token_address
-
-        if min_timestamp is not None:
-            params["min_timestamp"] = IMXTime.to_str(min_timestamp)
-
-        if max_timestamp is not None:
-            params["max_timestamp"] = IMXTime.to_str(max_timestamp)
-
-        if cursor is not None:
-            params["cursor"] = cursor
-
-        return self._get(self.transfer_url, params=params)
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "transfers", params=params)
 
     def balances(self, owner, token_addr=None):
-        url = self.balances_url / owner
+        url = self.urlv2 / "balances" / owner
         if token_addr is not None:
             url = url / token_addr
 
@@ -85,50 +68,34 @@ class IMXDB:
 
     def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
         if imx_token_id is not None:
-            return self._get(self.mintable_token_url / imx_token_id)
+            return self._get(self.urlv1 / "mintable-token" / imx_token_id)
 
-        return self._get(self.mintable_token_url / contract_addr / str(token_id))
+        return self._get(self.urlv1 / "mintable-token" / contract_addr / str(token_id))
 
     def mints(self, imx_token_id):
-        return self._get(self.mints_url / imx_token_id)
+        return self._get(self.urlv1 / "mints" / imx_token_id)
 
     def claims(self, addr):
-        return self._get(self.rewards_url / addr)
+        return self._get(self.urlv1 / "rewards" / addr)
 
     def assets(
         self,
         user="",
         collection="",
-        cursor=None,
         order_by="name",
         direction="asc",
-        page_size=100,
         status="imx",
+        page_size=100,
+        cursor="",
     ):
-        params = {
-            "order_by": order_by,
-            "direction": direction,
-            "page_size": page_size,
-            "status": status,
-        }
-
-        if user:
-            params["user"] = user
-
-        if collection:
-            params["collection"] = collection
-
-        if cursor is not None:
-            params["cursor"] = cursor
-
-        return self._get(self.assets_url, params)
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "assets", params=params)
 
     def stark_key(self, addr):
-        return self._get(self.users_url / addr)
+        return self._get(self.urlv1 / "users" / addr)
 
     def is_registered(self, addr):
         res = self.stark_key(addr)
-
         return "accounts" in res
 
     def orders(
@@ -143,40 +110,35 @@ class IMXDB:
         direction="asc",
         # timestamp, buy_quantity
         order_by="timestamp",
-        page_size=100,
         status="active",
+        page_size=100,
         cursor=None,
     ):
-        url = self.urlv1 / "orders"
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "orders", params=params)
 
-        params = {
-            "sell_token_address": sell_token_addr,
-            "sell_token_type": sell_token_type,
-            "include_fees": include_fees,
-            "direction": direction,
-            "order_by": order_by,
-            "page_size": page_size,
-            "status": status,
-        }
-
-        if sell_token_name:
-            params["sell_token_name"] = sell_token_name
-
-        if buy_token_addr:
-            params["buy_token_address"] = buy_token_addr
-
-        if buy_token_type:
-            params["buy_token_type"] = buy_token_type
-
-        if cursor is not None:
-            params["cursor"] = cursor
-
-        return self._get(url, params=params)
+    def trades(
+        self,
+        party_a_token_type="",
+        party_a_token_addr="",
+        party_a_token_id="",
+        party_b_token_type="",
+        party_b_token_addr="",
+        party_b_token_id="",
+        min_timestamp="",
+        max_timestamp="",
+        direction="asc",
+        order_by="timestamp",
+        page_size=100,
+        cursor=None,
+    ):
+        params = self._make_params(locals())
+        return self._get(self.urlv1 / "trades", params=params)
 
     def all_pages(self, func, *args, key=None, **kwargs):
         results = []
 
-        cursor = None
+        cursor = ""
         while True:
             res = func(*args, **kwargs, cursor=cursor)
             cursor = res["cursor"]
@@ -194,24 +156,24 @@ class IMXDB:
 
         return results
 
-    def _init_urls(self, net):
-        if net == "test":
-            self.base = URL("https://api.ropsten.x.immutable.com")
-        elif net == "main":
-            self.base = URL("https://api.x.immutable.com")
-        else:
-            raise ValueError(f"Unknown net: '{net}")
+    def _make_params(self, locals_):
+        del locals_["self"]
 
-        self.urlv1 = self.base / "v1"
-        self.urlv2 = self.base / "v2"
+        for k, v in locals_:
+            if k.endswith("addr"):
+                del locals_[k]
+                new_k = k.replace("addr", "address")
+                locals_[new_k] = v
+            elif k == "sender":
+                del locals_[k]
+                new_k = "user"
+                locals_[new_k] = v
+            elif not isinstance(v, bool) and not v:
+                del locals_[k]
+            elif k.endswith("timestamp") and isinstance(v, dt.datetime):
+                locals_[k] = IMXTime.to_str(v)
 
-        self.transfer_url = self.urlv1 / "transfers"
-        self.balances_url = self.urlv2 / "balances"
-        self.assets_url = self.urlv1 / "assets"
-        self.mintable_token_url = self.urlv1 / "mintable-token"
-        self.mints_url = self.urlv1 / "mints"
-        self.rewards_url = self.urlv1 / "rewards"
-        self.users_url = self.urlv1 / "users"
+        return locals_
 
     def _get(self, url, params=None):
         res = req.get(url, params=params)
