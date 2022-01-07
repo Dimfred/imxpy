@@ -14,36 +14,6 @@ THIS LIBRARY IS IN DEVELOPMENT AND CAN CONTAIN BUGS, USE AT YOUR OWN RISK! I WON
     // build the typescript file
     tsc
 
-## Feature Overview
-
-Fell free to submit any feature requests / proposals through the issues.
-
-### Signable
-
-- `registerImx`
-- `createProject`
-- `createCollection`
-- `updateCollection`
-- `addMetadataSchemaToCollection`
-- ~~updateMetadataSchemaByName~~
-- `transfer`
-- `mint`
-- `burn`
-- `prepareWithdrawal`
-- `completeWithdrawal`
-- `deposit`
-- `createOrder`
-- `cancelOrder`
-- `createTrade`
-
-### Database
-
-- `transfers`
-- `balances`
-- `is_registered`
-- `stark_key`
-- TODO more
-
 ## Examples
 
     from imxpy import IMXClient
@@ -65,18 +35,75 @@ Fell free to submit any feature requests / proposals through the issues.
 
 Other examples on how to use the `client` correctly can be found in `tests/test_imx_client.py`. Tests starting with `test_okay_*`, are meant to show the correct usage of the library, whereas the others show wrong behavior.
 
+## Feature Overview
+
+Fell free to submit any feature requests / proposals through the issues.
+
+### Signable
+
+- [x] `register`
+- [ ] `approveNFT`
+- [ ] `approveERC20`
+- [x] `deposit`
+- [ ] `depositCancel`
+- [ ] `depositReclaim`
+- [x] `prepareWithdrawal`
+- [x] `completeWithdrawal`
+- [x] `transfer`
+- [x] `burn`
+- [ ] `signMessage`
+- [x] `mint`
+- [x] `createOrder`
+- [x] `cancelOrder`
+- [x] `createTrade`
+- [ ] `createExchange`
+- [x] `createProject`
+- [x] `createCollection`
+- [x] `updateCollection`
+- [x] `addMetadataSchemaToCollection`
+- [ ] `updateMetadataSchemaByName`
+
+### Database
+
+- [ ] `applications`
+  - [ ] `list`
+  - [ ] `details`
+- [ ] `assets`
+  - [x] `list`
+  - [ ] `details`
+- [ ] `balances`
+  - [ ] `wei balance`
+  - [x] `list`
+  - [ ] `token balance`
+- [ ] `TLV Info`
+- [ ] `collections`
+  - [ ] `list`
+  - [ ] `details`
+  - [ ] `filters`
+  - [ ] `metadataSchema`
+- [ ] `depostis`
+  - [ ] `list`
+  - [ ] `details`
+- [x] `mints`
+  - [x] `mintable_token`
+  - [x] `mintable_token_with_addr`
+  - [x] `mints`
+  - [x] `mints details`
+- [ ] `orders
+  - [x] `list`
+  - [ ] `details`
+- [x] `claims
+- [x] `starkkeys`
+- [x] `transfers`
+- [ ] `withdrawals`
+  - [ ] `list`
+  - [ ] `details`
+- [ ] `snapshot`
+- [ ] `tokens`
+  - [ ] `list`
+  - [ ] `details`
+- [x] `trades`
+  - [x] `list`
+  - [x] `details`
+
 ## Known Issues
-
-## TODO
-
-- client features:
-  - ~~withdraw~~
-  - ~~sell order~~
-  - ~~cancel order~~
-  - ~~create trade~~
-  - buy order?
-
-- database features:
-  - almost every is missing except for transfer, asset n stuff
-  - write tests for database features
-  - parse the inputs, as well as the results into pydantic objects
