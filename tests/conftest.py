@@ -18,6 +18,10 @@ def random_number():
 
     return random.randint(0, 100000000000000000000000000000000000)
 
+@pytest.fixture
+def random_str():
+    return str(random_number())
+
 
 @pytest.fixture
 def acc1():

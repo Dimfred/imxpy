@@ -22,7 +22,7 @@ import subprocess as sp
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-
+# TODO fix the import stuff, that sucks like that
 from imxpy.imx_db import IMXDB
 from imxpy.imx_objects import *
 from imxpy import utils
@@ -61,6 +61,16 @@ class IMXClient:
         self, params: CreateMetadataSchemaParams, max_retries: int = 1
     ):
         return self._run_pool("create_metadata_schema", params, max_retries)
+
+    @utils.ensure_pk
+    def update_metadata_schema(
+        self, params: UpdateMetadataSchemaParams, max_retries: int = 1
+    ):
+        return self._run_pool("update_metadata_schema", params, max_retries)
+
+    @utils.ensure_pk
+    def create_exchange(self, params: CreateExchangeParams, max_retries: int = 1):
+        return self._run_pool("create_exchange", params, max_retries)
 
     @utils.ensure_pk
     def transfer(self, params: TransferParams, max_retries: int = 1):

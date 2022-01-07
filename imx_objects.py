@@ -46,6 +46,12 @@ class Utils:
 
         return kwargs
 
+    @staticmethod
+    def pop_if_none(kwargs, *keys):
+        for key in keys:
+            if kwargs[key] is None:
+                del kwargs[key]
+
 
 T = TypeVar("T")
 
@@ -125,6 +131,7 @@ class Base(BaseModel):
 ########################################################################################
 class SignMsgParams(BaseModel):
     msg: str
+
 
 ########################################################################################
 # TOKENS
@@ -218,7 +225,7 @@ class BaseParams(Base):
 
 
 ########################################################################################
-# REGISTRATION & PROJECT & COLLECTION
+# REGISTRATION & PROJECT & COLLECTION & EXCHANGE
 ########################################################################################
 class CreateProjectParams(Base):
     name: str
@@ -266,7 +273,44 @@ class UpdateCollectionParams(Base):
 class CreateMetadataSchemaParams(Base):
     contractAddress: str = Field(alias="contract_addr")
     # TODO could also define the whole schema as a model
-    metadata: dict
+    metadata: List[dict]
+
+    def dict(self, *args, **kwargs):
+        d = super().dict(*args, **kwargs)
+        d["params"] = {"metadata": d.pop("metadata")}
+        return d
+
+
+class UpdateMetadataSchemaParams(Base):
+    name: str
+    contractAddress: str = Field(alias="contract_addr")
+    new_name: Optional[str]
+    new_type: Optional[str]
+    new_filterable: Optional[bool]
+
+    @validator("contractAddress")
+    def validate_addr(cls, addr):
+        return Validator.validate_addr(addr)
+
+    def dict(self):
+        d = super().dict()
+        d["params"] = {}
+        for key in ("name", "type", "filterable"):
+            new_key = f"new_{key}"
+            if d[new_key] is None:
+                del d[new_key]
+            else:
+                d["params"][key] = d.pop(new_key)
+
+        return d
+
+
+class CreateExchangeParams(Base):
+    walletAddress: str = Field(alias="wallet_addr")
+
+    @validator("walletAddress")
+    def validate_addr(cls, addr):
+        Validator.validate_addr(addr)
 
 
 ########################################################################################

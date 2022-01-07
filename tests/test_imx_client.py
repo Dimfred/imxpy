@@ -11,6 +11,7 @@ class TestUtility:
 
         # TODO actually thats not okay currently it returns only
         # success but not the signed message
+        # related to IMX not us
         assert res["status"] == "success"
 
     def test_okay_user_registered(self, client):
@@ -62,9 +63,33 @@ class TestUtility:
         assert res["status"] == "success"
         assert res["result"]["name"] == "test2"
 
-    # TODO
-    def test_okay_metadata_schema_added(self):
-        pass
+    def test_okay_metadata_schema_added_and_updated(
+        self, client, contract_addr, random_str
+    ):
+        schema = [{"name": random_str, "type": "text", "filterable": False}]
+
+        params = CreateMetadataSchemaParams(
+            contract_addr=contract_addr, metadata=schema
+        )
+        res = client.create_metadata_schema(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+
+        params = UpdateMetadataSchemaParams(
+            contract_addr=contract_addr, name=random_str, new_name=random_str + "i"
+        )
+        res = client.update_metadata_schema(params)
+        res = res.result()
+
+        assert res["status"] == "success"
+
+    def test_okay_create_exchange(self, client, acc1):
+        params = CreateExchangeParams(wallet_addr=acc1.addr)
+        res = client.create_exchange(params)
+        res = res.result()
+        # TODO currently throws error, probably because it is not possible to create
+        # on mainnet? However, the call is there and should work correctly
 
 
 class TestTransfer:

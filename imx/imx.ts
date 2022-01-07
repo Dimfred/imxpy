@@ -111,9 +111,10 @@ const createErrorMsg = (msg: any) => {
             break;
         }
         case "update_metadata_schema": {
-            // TODO
-            throw new Error("update_metadata_schema not implemented");
-            // res = await client.updateMetadataSchemaByName()
+            res = await client.updateMetadataSchemaByName(
+                params.name, params.contractAddress, params.params
+            );
+            msg = createSuccessMsg(res);
             break;
         }
         case "transfer": {
@@ -188,6 +189,11 @@ const createErrorMsg = (msg: any) => {
         case "approve_erc20": {
             params.amount = BigNumber.from(params.amount);
             res = await client.approveERC20(params);
+            msg = createSuccessMsg(res);
+            break;
+        }
+        case "create_exchange": {
+            res = await client.createExchange(params.wallet_addr);
             msg = createSuccessMsg(res);
             break;
         }

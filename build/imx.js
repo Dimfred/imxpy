@@ -114,26 +114,27 @@ var createErrorMsg = function (msg) {
                     case "update_collection": return [3 /*break*/, 10];
                     case "create_metadata_schema": return [3 /*break*/, 12];
                     case "update_metadata_schema": return [3 /*break*/, 14];
-                    case "transfer": return [3 /*break*/, 15];
-                    case "mint": return [3 /*break*/, 17];
-                    case "burn": return [3 /*break*/, 19];
-                    case "prepare_withdrawal": return [3 /*break*/, 21];
-                    case "complete_withdrawal": return [3 /*break*/, 23];
-                    case "deposit": return [3 /*break*/, 25];
-                    case "deposit_cancel": return [3 /*break*/, 27];
-                    case "deposit_reclaim": return [3 /*break*/, 28];
-                    case "create_order": return [3 /*break*/, 29];
-                    case "cancel_order": return [3 /*break*/, 31];
-                    case "create_trade": return [3 /*break*/, 33];
-                    case "approve_nft": return [3 /*break*/, 35];
-                    case "approve_erc20": return [3 /*break*/, 37];
+                    case "transfer": return [3 /*break*/, 16];
+                    case "mint": return [3 /*break*/, 18];
+                    case "burn": return [3 /*break*/, 20];
+                    case "prepare_withdrawal": return [3 /*break*/, 22];
+                    case "complete_withdrawal": return [3 /*break*/, 24];
+                    case "deposit": return [3 /*break*/, 26];
+                    case "deposit_cancel": return [3 /*break*/, 28];
+                    case "deposit_reclaim": return [3 /*break*/, 29];
+                    case "create_order": return [3 /*break*/, 30];
+                    case "cancel_order": return [3 /*break*/, 32];
+                    case "create_trade": return [3 /*break*/, 34];
+                    case "approve_nft": return [3 /*break*/, 36];
+                    case "approve_erc20": return [3 /*break*/, 38];
+                    case "create_exchange": return [3 /*break*/, 40];
                 }
-                return [3 /*break*/, 39];
+                return [3 /*break*/, 42];
             case 2: return [4 /*yield*/, client.signMessage(params.msg)];
             case 3:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
             case 4: return [4 /*yield*/, client.registerImx({
                     etherKey: client.address.toLowerCase(),
                     starkPublicKey: client.starkPublicKey
@@ -141,88 +142,85 @@ var createErrorMsg = function (msg) {
             case 5:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
             case 6: return [4 /*yield*/, client.createProject(params)];
             case 7:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
             case 8: return [4 /*yield*/, client.createCollection(params)];
             case 9:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
             case 10: return [4 /*yield*/, client.updateCollection(params.contractAddress, params.params)];
             case 11:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
             case 12: return [4 /*yield*/, client.addMetadataSchemaToCollection(params.contractAddress, params.params)];
             case 13:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 14:
-                {
-                    // TODO
-                    throw new Error("update_metadata_schema not implemented");
-                    // res = await client.updateMetadataSchemaByName()
-                    return [3 /*break*/, 40];
-                }
-                _b.label = 15;
+                return [3 /*break*/, 43];
+            case 14: return [4 /*yield*/, client.updateMetadataSchemaByName(params.name, params.contractAddress, params.params)];
             case 15:
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 43];
+            case 16:
                 params.quantity = ethers_1.BigNumber.from(params.quantity);
                 return [4 /*yield*/, client.transfer(params)];
-            case 16:
+            case 17:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 17: return [4 /*yield*/, client.mintV2(params)];
-            case 18:
+                return [3 /*break*/, 43];
+            case 18: return [4 /*yield*/, client.mintV2(params)];
+            case 19:
                 res = _b.sent();
                 msg = createSuccessMsg(res.results);
-                return [3 /*break*/, 40];
-            case 19: return [4 /*yield*/, client.burn(params)];
-            case 20:
+                return [3 /*break*/, 43];
+            case 20: return [4 /*yield*/, client.burn(params)];
+            case 21:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 21: return [4 /*yield*/, client.prepareWithdrawal(params)];
-            case 22:
-                res = _b.sent();
-                msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
+            case 22: return [4 /*yield*/, client.prepareWithdrawal(params)];
             case 23:
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 43];
+            case 24:
                 params["starkPublicKey"] = client.starkPublicKey;
                 return [4 /*yield*/, client.completeWithdrawal(params)];
-            case 24:
+            case 25:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 25: return [4 /*yield*/, client.deposit(params)];
-            case 26:
-                res = _b.sent();
-                msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
+            case 26: return [4 /*yield*/, client.deposit(params)];
             case 27:
-                {
-                    throw new Error("deposit_cancel not implemented");
-                    return [3 /*break*/, 40];
-                }
-                _b.label = 28;
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 43];
             case 28:
                 {
-                    throw new Error("deposit_reclaim not implemented");
-                    return [3 /*break*/, 40];
+                    throw new Error("deposit_cancel not implemented");
+                    return [3 /*break*/, 43];
                 }
                 _b.label = 29;
-            case 29: return [4 /*yield*/, client.createOrder(params)];
-            case 30:
+            case 29:
+                {
+                    throw new Error("deposit_reclaim not implemented");
+                    return [3 /*break*/, 43];
+                }
+                _b.label = 30;
+            case 30: return [4 /*yield*/, client.createOrder(params)];
+            case 31:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 31: return [4 /*yield*/, client.cancelOrder(params.order_id)()];
-            case 32:
+                return [3 /*break*/, 43];
+            case 32: return [4 /*yield*/, client.cancelOrder(params.order_id)()];
+            case 33:
                 // TODO at some point this will be fixed by imx and will
                 // (hopefully) error out
                 res = _b.sent();
@@ -234,30 +232,35 @@ var createErrorMsg = function (msg) {
                     res = res.left;
                 }
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 33: return [4 /*yield*/, client.createTrade(params)];
-            case 34:
+                return [3 /*break*/, 43];
+            case 34: return [4 /*yield*/, client.createTrade(params)];
+            case 35:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 35: return [4 /*yield*/, client.approveNFT(params)];
-            case 36:
-                res = _b.sent();
-                msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
+                return [3 /*break*/, 43];
+            case 36: return [4 /*yield*/, client.approveNFT(params)];
             case 37:
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 43];
+            case 38:
                 params.amount = ethers_1.BigNumber.from(params.amount);
                 return [4 /*yield*/, client.approveERC20(params)];
-            case 38:
+            case 39:
                 res = _b.sent();
                 msg = createSuccessMsg(res);
-                return [3 /*break*/, 40];
-            case 39:
+                return [3 /*break*/, 43];
+            case 40: return [4 /*yield*/, client.createExchange(params.wallet_addr)];
+            case 41:
+                res = _b.sent();
+                msg = createSuccessMsg(res);
+                return [3 /*break*/, 43];
+            case 42:
                 {
                     throw new Error("Invalid method name: '" + baseParams.method_name + "'");
                 }
-                _b.label = 40;
-            case 40:
+                _b.label = 43;
+            case 43:
                 // log result to stdout to be parsed by the python process
                 console.log(JSON.stringify(msg));
                 return [2 /*return*/];

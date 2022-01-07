@@ -39,17 +39,17 @@ class IMXDB:
 
     def transfers(
         self,
-        sender=None,
-        receiver=None,
+        sender="",
+        receiver="",
         # order_by="timestamp",
         direction="asc",
         token_type="ETH",
-        token_id=None,
-        token_addr=None,
-        min_timestamp=None,
-        max_timestamp=None,
+        token_id="",
+        token_addr="",
+        min_timestamp="",
+        max_timestamp="",
         page_size=100,
-        cursor=None,
+        cursor="",
     ):
         params = self._make_params(locals())
         return self._get(self.urlv1 / "transfers", params=params)
@@ -100,7 +100,7 @@ class IMXDB:
 
     def orders(
         self,
-        sell_token_addr,
+        sell_token_addr="",
         sell_token_name="",
         sell_token_type="ERC721",
         buy_token_addr="",
@@ -112,7 +112,7 @@ class IMXDB:
         order_by="timestamp",
         status="active",
         page_size=100,
-        cursor=None,
+        cursor="",
     ):
         params = self._make_params(locals())
         return self._get(self.urlv1 / "orders", params=params)
@@ -130,7 +130,7 @@ class IMXDB:
         direction="asc",
         order_by="timestamp",
         page_size=100,
-        cursor=None,
+        cursor="",
     ):
         params = self._make_params(locals())
         return self._get(self.urlv1 / "trades", params=params)

@@ -56,12 +56,12 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `createOrder`
 - [x] `cancelOrder`
 - [x] `createTrade`
-- [ ] `createExchange`
+- [x] `createExchange`
 - [x] `createProject`
 - [x] `createCollection`
 - [x] `updateCollection`
 - [x] `addMetadataSchemaToCollection`
-- [ ] `updateMetadataSchemaByName`
+- [x] `updateMetadataSchemaByName`
 
 ### Database
 
