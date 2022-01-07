@@ -36,7 +36,16 @@ class TestAssets:
         assert res["token_address"]
 
 
+class TestBalances:
+    def test_okay_as_wei(self, client, acc1):
+        res = client.db.balances(acc1.addr)
+        assert int(res["result"][0]["balance"]) > 800000
 
+    def test_okay_token_balance(self, client, acc1, erc20_contract_addr):
+        res = client.db.balances(acc1.addr, erc20_contract_addr)
+
+        assert res["symbol"] == "GODS"
+        assert res["balance"] == "0"
 
 
 # TODO

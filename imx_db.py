@@ -71,6 +71,13 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "assets", params=params)
 
+    def balances(self, owner, token_addr=""):
+        url = self.urlv2 / "balances" / owner
+        if token_addr:
+            return self._get(url / token_addr)
+
+        return self._get(url)
+
     def transfers(
         self,
         sender="",
@@ -88,12 +95,6 @@ class IMXDB:
         params = self._make_params(locals())
         return self._get(self.urlv1 / "transfers", params=params)
 
-    def balances(self, owner, token_addr=None):
-        url = self.urlv2 / "balances" / owner
-        if token_addr is not None:
-            url = url / token_addr
-
-        return self._get(url)
 
     def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
         if imx_token_id is not None:

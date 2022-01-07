@@ -172,3 +172,7 @@ def valid_order_params(client, client2, acc2, contract_addr):
 @pytest.fixture
 def unregistered_addr():
     return "0xd2Bf8229D98716abEA9D22453C5C5613078B2c46"
+
+@pytest.fixture
+def erc20_contract_addr():
+    return "0x4c04c39fb6d2b356ae8b06c47843576e32a1963e"

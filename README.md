@@ -71,10 +71,9 @@ Fell free to submit any feature requests / proposals through the issues.
 - [x] `assets`
   - [x] `list`
   - [x] `details`
-- [ ] `balances`
-  - [ ] `wei balance`
+- [x] `balances`
   - [x] `list`
-  - [ ] `token balance`
+  - [x] `token balance`
 - [ ] `TLV Info`
 - [ ] `collections`
   - [ ] `list`
