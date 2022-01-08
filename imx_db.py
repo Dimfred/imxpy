@@ -38,21 +38,35 @@ class IMXDB:
         self.urlv1 = self.base / "v1"
         self.urlv2 = self.base / "v2"
 
+        self.applications_url = self.urlv1 / "applications"
+        self.orders_url = self.urlv1 / "orders"
+        self.assets_url = self.urlv1 / "assets"
+        self.balances_url = self.urlv2 / "balances"
+        self.collections_url = self.urlv1 / "collections"
+        self.deposits_url = self.urlv1 / "deposits"
+        self.mintable_token_url = self.urlv1 / "mintable-token"
+        self.mints_url = self.urlv1 / "mints"
+        self.claims_url = self.urlv1 / "rewards"
+        self.users_url = self.urlv1 / "users"
+        self.transfers_url = self.urlv1 / "transfers"
+        self.withdrawals_url = self.urlv1 / "withdrawals"
+        self.snapshot_url = self.urlv1 / "snapshot" / "balances"
+        self.tokens_url = self.urlv1 / "tokens"
+        self.trades_url = self.urlv1 / "trades"
+
     def application(self, id):
-        return self._get(self.urlv1 / "applications" / id)
+        return self._get(self.applications_url / id)
 
     def applications(
         self, *, order_by="name", direction="asc", page_size=100, cursor=""
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "applications", params=params)
+        return self._get(self.applications_url, params=params)
 
     def asset(self, token_id, contract_addr, include_fees=True):
         params = {"include_fees": True}
 
-        return self._get(
-            self.urlv1 / "assets" / contract_addr / str(token_id), params=params
-        )
+        return self._get(self.assets_url / contract_addr / str(token_id), params=params)
 
     def assets(
         self,
@@ -73,17 +87,17 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "assets", params=params)
+        return self._get(self.assets_url, params=params)
 
     def balances(self, owner, token_addr=""):
-        url = self.urlv2 / "balances" / owner
+        url = self.balances_url / owner
         if token_addr:
             return self._get(url / token_addr)
 
         return self._get(url)
 
     def collection(self, contract_addr):
-        return self._get(self.urlv1 / "collections" / contract_addr)
+        return self._get(self.collections_url / contract_addr)
 
     def collections(
         self,
@@ -95,19 +109,19 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "collections", params=params)
+        return self._get(self.collections_url, params=params)
 
     def collection_filters(self, contract_addr, *, page_size=100, next_page_token=""):
         params = {"page_size": page_size, "next_page_token": next_page_token}
         return self._get(
-            self.urlv1 / "collections" / contract_addr / "filters", params=params
+            self.collections_url / contract_addr / "filters", params=params
         )
 
     def collection_metadata_schema(self, contract_addr):
-        return self._get(self.urlv1 / "collections" / contract_addr / "metadata-schema")
+        return self._get(self.collections_url / contract_addr / "metadata-schema")
 
     def deposit(self, id):
-        return self._get(self.urlv1 / "deposits" / str(id))
+        return self._get(self.deposits_url / str(id))
 
     def deposits(
         self,
@@ -130,16 +144,16 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "deposits", params=params)
+        return self._get(self.deposits_url, params=params)
 
     def mintable_token(self, imx_token_id=None, token_id=None, contract_addr=None):
         if imx_token_id is not None:
             return self._get(self.urlv1 / "mintable-token" / imx_token_id)
 
-        return self._get(self.urlv1 / "mintable-token" / contract_addr / str(token_id))
+        return self._get(self.mintable_token_url / contract_addr / str(token_id))
 
     def mints(self, imx_token_id):
-        return self._get(self.urlv1 / "mints" / imx_token_id)
+        return self._get(self.mints_url / imx_token_id)
 
     def order(self, order_id):
         return self._get(self.urlv1 / "orders" / str(order_id))
@@ -177,20 +191,20 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "orders", params=params)
+        return self._get(self.orders_url, params=params)
 
     def claims(self, addr):
-        return self._get(self.urlv1 / "rewards" / addr)
+        return self._get(self.claims_url / addr)
 
     def stark_key(self, addr):
-        return self._get(self.urlv1 / "users" / addr)
+        return self._get(self.users_url / addr)
 
     def is_registered(self, addr):
         res = self.stark_key(addr)
         return "accounts" in res
 
     def transfer(self, id):
-        return self._get(self.urlv1 / "transfers" / str(id))
+        return self._get(self.transfers_url / str(id))
 
     def transfers(
         self,
@@ -208,25 +222,23 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "transfers", params=params)
+        return self._get(self.transfers_url, params=params)
 
     def withdrawal(self, id):
-        return self._get(self.urlv1 / "withdrawals" / str(id))
+        return self._get(self.withdrawals_url / str(id))
 
     # def withdrawals(self, *)
 
     def snapshot(self, contract_addr, page_size=100, cursor=""):
         params = {"page_size": page_size, "cursor": cursor}
-        return self._get(
-            self.urlv1 / "snapshot" / "balances" / contract_addr, params=params
-        )
+        return self._get(self.snapshot_url / contract_addr, params=params)
 
     def token(self, token_addr=""):
-        return self._get(self.urlv1 / "tokens" / token_addr)
+        return self._get(self.tokens_url / token_addr)
 
     def tokens(self, addr="", symbols=""):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "tokens", params=params)
+        return self._get(self.tokens_url, params=params)
 
     def trades(
         self,
@@ -245,7 +257,7 @@ class IMXDB:
         cursor="",
     ):
         params = self._make_params(locals())
-        return self._get(self.urlv1 / "trades", params=params)
+        return self._get(self.trades_url, params=params)
 
     def _make_params(self, locals_):
         del locals_["self"]

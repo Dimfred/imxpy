@@ -54,7 +54,6 @@ def paginate(func, *args, **kwargs):
 def all_pages(func, *args, key=None, **kwargs):
     results = []
     for res in paginate(func, *args, **kwargs):
-        res = res["result"]
         results.extend(res)
 
     if key is not None:

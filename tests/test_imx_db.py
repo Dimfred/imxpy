@@ -52,7 +52,7 @@ class TestPagination:
             if counter == 3:
                 break
 
-            cur = res["result"][0]["transaction_id"]
+            cur = res[0]["transaction_id"]
             assert cur != prev
             prev = cur
 
