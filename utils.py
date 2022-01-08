@@ -41,6 +41,10 @@ def paginate(func, *args, **kwargs):
         if res is None:
             break
 
+        res = res["result"]
+        if not res:
+            return
+
         yield res
 
         if not cursor:

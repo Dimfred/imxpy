@@ -61,8 +61,8 @@ class IMXDB:
         collection="",
         name="",
         metadata="",
-        sell_orders=True,
-        buy_orders=True,
+        sell_orders=False,
+        buy_orders=False,
         include_fees=True,
         updated_min_timestamp="",
         updated_max_timestamp="",
@@ -240,7 +240,7 @@ class IMXDB:
         min_timestamp="",
         max_timestamp="",
         direction="asc",
-        order_by="timestamp",
+        order_by="",
         page_size=100,
         cursor="",
     ):
@@ -251,7 +251,9 @@ class IMXDB:
         del locals_["self"]
 
         for k, v in list(locals_.items()):
-            if k.endswith("addr"):
+            if not isinstance(v, bool) and not v:
+                del locals_[k]
+            elif k.endswith("addr"):
                 del locals_[k]
                 new_k = k.replace("addr", "address")
                 locals_[new_k] = v
@@ -259,8 +261,6 @@ class IMXDB:
                 del locals_[k]
                 new_k = "user"
                 locals_[new_k] = v
-            elif not isinstance(v, bool) and not v:
-                del locals_[k]
             elif k.endswith("timestamp") and isinstance(v, dt.datetime):
                 locals_[k] = IMXTime.to_str(v)
 
