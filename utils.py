@@ -33,10 +33,14 @@ def ensure_pk(func):
     return deco
 
 
-def paginate(func, *args, **kwargs):
+def no_retry(f, *args, **kwargs):
+    return f(*args, **kwargs)
+
+
+def paginate(func, *args, retry_strategy=no_retry, **kwargs):
     cursor = ""
     while True:
-        res = func(*args, **kwargs, cursor=cursor)
+        res = retry_strategy(func, *args, **kwargs, cursor=cursor)
         cursor = res["cursor"]
         if res is None:
             break
@@ -51,9 +55,9 @@ def paginate(func, *args, **kwargs):
             break
 
 
-def all_pages(func, *args, key=None, **kwargs):
+def all_pages(func, *args, key=None, retry_strategy=no_retry, **kwargs):
     results = []
-    for res in paginate(func, *args, **kwargs):
+    for res in paginate(func, *args, retry_strategy=retry_strategy, **kwargs):
         results.extend(res)
 
     if key is not None:
