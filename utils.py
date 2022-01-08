@@ -18,6 +18,7 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import sys
 import datetime as dt
+import time
 from pydantic import BaseModel, Field, validator
 from typing import Union, Optional
 
@@ -35,6 +36,17 @@ def ensure_pk(func):
 
 def no_retry(f, *args, **kwargs):
     return f(*args, **kwargs)
+
+
+def linear_retry(f, *args, post_call=lambda x: x, **kwargs):
+    for try_ in range(1, 10000):
+        try:
+            res = f(*args, **kwargs)
+            res = post_call(res)
+
+            return res
+        except:
+            time.sleep(try_)
 
 
 def paginate(func, *args, retry_strategy=no_retry, **kwargs):
