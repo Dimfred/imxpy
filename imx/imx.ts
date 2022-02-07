@@ -212,7 +212,7 @@ const createErrorMsg = (msg: any) => {
         msg = JSON.parse(msgStr)["message"];
     }
     catch (e_) {
-        msg = `[TYPESCRIPTWRAPPER]: ${e}`;
+        msg = `[TYPESCRIPTWRAPPER]: ${msgStr}`;
     }
 
     let err = createErrorMsg(msg);

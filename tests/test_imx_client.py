@@ -12,13 +12,13 @@ class TestUtility:
         # TODO actually thats not okay currently it returns only
         # success but not the signed message
         # related to IMX not us
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
 
     def test_okay_user_registered(self, client):
         res = client.register()
         res = res.result()
 
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
 
     def test_okay_project_created(self, client):
         params = CreateProjectParams(
@@ -26,9 +26,9 @@ class TestUtility:
         )
         res = client.create_project(params)
         res = res.result()
-
-        assert res["status"] == "success"
-        assert res["result"]["id"]
+        
+        assert res["status"] == "success", res
+        assert res["result"]["id"], res
 
     def test_okay_collection_created_and_updated(self, client, project_id, random_addr):
         return
@@ -48,9 +48,9 @@ class TestUtility:
         res = client.create_collection(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["address"] == random_addr
-
+        assert res["status"] == "success", res
+        assert res["result"]["address"] == random_addr, res
+ 
         params = UpdateCollectionParams(name="test2", contract_addr=random_addr)
         res = client.update_collection(params)
         res = res.result()
@@ -60,8 +60,8 @@ class TestUtility:
         res = client.update_collection(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["name"] == "test2"
+        assert res["status"] == "success", res
+        assert res["result"]["name"] == "test2", res
 
     def test_okay_metadata_schema_added_and_updated(
         self, client, contract_addr, random_str
@@ -74,7 +74,7 @@ class TestUtility:
         res = client.create_metadata_schema(params)
         res = res.result()
 
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
 
         params = UpdateMetadataSchemaParams(
             contract_addr=contract_addr, name=random_str, new_name=random_str + "i"
@@ -82,7 +82,7 @@ class TestUtility:
         res = client.update_metadata_schema(params)
         res = res.result()
 
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
 
     def test_okay_create_exchange(self, client, acc1):
         params = CreateExchangeParams(wallet_addr=acc1.addr)
@@ -106,8 +106,8 @@ class TestTransfer:
         res = client.transfer(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["transfer_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["transfer_id"], res
 
     def test_okay_simple_erc721(self, client, token_id, acc1, acc2, contract_addr):
         params = TransferParams(
@@ -118,8 +118,8 @@ class TestTransfer:
         res = client.transfer(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["transfer_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["transfer_id"], res
 
     # TODO
     def test_okay_simple_erc20(self, client, acc1, acc2):
@@ -132,8 +132,8 @@ class TestTransfer:
         res = client.transfer(params, max_retries=1)
         res = res.result()
 
-        assert res["status"] == "error"
-        assert "insufficient balance" in res["result"]
+        assert res["status"] == "error", res
+        assert "insufficient balance" in res["result"], res
 
 
 class TestMint:
@@ -177,7 +177,7 @@ class TestMint:
         res = client.mint(params, max_retries=1)
         res = res.result()
 
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
 
     def test_fails_unregistered_contract_addr(
         self, client, acc1, unregistered_contract_addr
@@ -199,8 +199,8 @@ class TestMint:
         res = client.mint(params, max_retries=1)
         res = res.result()
 
-        assert res["status"] == "error"
-        assert "no contract code at given address" in res["result"]
+        assert res["status"] == "error", res
+        assert "no contract code at given address" in res["result"], res
 
     def test_fails_duplicate_asset(self, client, contract_addr, acc1):
         params = MintParams(
@@ -220,8 +220,8 @@ class TestMint:
         res = client.mint(params, max_retries=1)
         res = res.result()
 
-        assert res["status"] == "error"
-        assert "asset, duplicate id" in res["result"]
+        assert res["status"] == "error", res
+        assert "asset, duplicate id" in res["result"], res
 
 
 class TestBurn:
@@ -234,8 +234,8 @@ class TestBurn:
         res = client.burn(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["transfer_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["transfer_id"], res
 
 
 class TestWithdrawal:
@@ -246,8 +246,8 @@ class TestWithdrawal:
         res = client.prepare_withdrawal(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["withdrawal_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["withdrawal_id"], res
 
     def test_okay_complete_withdrawal(self, client, acc1):
         # this test is a bit weird, since it can only run if we have
@@ -266,7 +266,7 @@ class TestWithdrawal:
         res = res.result()
 
         # always returns success so no help here
-        assert res["status"] == "success"
+        assert res["status"] == "success", res
         # TODO the result with each withdrawal a new "random" address dunno why yet tho.
         # assert res["result"] == acc1.addr
 
@@ -294,17 +294,17 @@ class TestTrading:
         res = client.create_order(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["order_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["order_id"], res
 
         order_id = res["result"]["order_id"]
         params = CancelOrderParams(order_id=order_id)
         res = client.cancel_order(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["order_id"] == int(order_id)
-        assert not res["result"]["status"]
+        assert res["status"] == "success", res
+        assert res["result"]["order_id"] == int(order_id), res
+        assert not res["result"]["status"], res
 
     def test_okay_order_buy(self):
         # TODO I think this didn't work for serveral people, just let it here as
@@ -323,8 +323,8 @@ class TestTrading:
         res = client.create_trade(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]["trade_id"]
+        assert res["status"] == "success", res
+        assert res["result"]["trade_id"], res
 
 
 class TestApprovals:
@@ -350,5 +350,5 @@ class TestApprovals:
         res = client.approve_erc20(params)
         res = res.result()
 
-        assert res["status"] == "success"
-        assert res["result"]
+        assert res["status"] == "success", res
+        assert res["result"], res

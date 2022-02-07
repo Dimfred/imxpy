@@ -273,7 +273,7 @@ var createErrorMsg = function (msg) {
         msg = JSON.parse(msgStr)["message"];
     }
     catch (e_) {
-        msg = "[TYPESCRIPTWRAPPER]: " + e;
+        msg = "[TYPESCRIPTWRAPPER]: " + msgStr;
     }
     var err = createErrorMsg(msg);
     console.log(JSON.stringify(err));
