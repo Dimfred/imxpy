@@ -219,18 +219,9 @@ var createErrorMsg = function (msg) {
                 res = _b.sent();
                 msg = createSuccessMsg(res);
                 return [3 /*break*/, 43];
-            case 32: return [4 /*yield*/, client.cancelOrder(params.order_id)()];
+            case 32: return [4 /*yield*/, client.cancelOrder(params.order_id)];
             case 33:
-                // TODO at some point this will be fixed by imx and will
-                // (hopefully) error out
                 res = _b.sent();
-                // TODO dunno whether more params can appear here
-                if (res._tag === "Right") {
-                    res = res.right;
-                }
-                else {
-                    res = res.left;
-                }
                 msg = createSuccessMsg(res);
                 return [3 /*break*/, 43];
             case 34: return [4 /*yield*/, client.createTrade(params)];
