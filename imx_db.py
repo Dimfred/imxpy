@@ -261,7 +261,6 @@ class IMXDB:
 
     def _make_params(self, locals_):
         del locals_["self"]
-
         for k, v in list(locals_.items()):
             if not isinstance(v, bool) and not v:
                 del locals_[k]
