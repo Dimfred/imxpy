@@ -66,7 +66,7 @@ var CreateIMXClient = function (privateKey, network, gasLimit, gasPrice) {
                     else if (network === "main")
                         selectedNetwork = networkParams.main;
                     else
-                        throw Error("[TYPESCRIPTWRAPPER]: Unknown network type: '" + network + "'");
+                        throw Error("[TYPESCRIPTWRAPPER]: Unknown network type: '".concat(network, "'"));
                     signer = new wallet_1.Wallet(privateKey).connect(provider);
                     return [4 /*yield*/, imx_sdk_1.ImmutableXClient.build({
                             publicApiUrl: selectedNetwork.apiUrl,
@@ -248,7 +248,7 @@ var createErrorMsg = function (msg) {
                 return [3 /*break*/, 43];
             case 42:
                 {
-                    throw new Error("Invalid method name: '" + baseParams.method_name + "'");
+                    throw new Error("Invalid method name: '".concat(baseParams.method_name, "'"));
                 }
                 _b.label = 43;
             case 43:
@@ -264,7 +264,7 @@ var createErrorMsg = function (msg) {
         msg = JSON.parse(msgStr)["message"];
     }
     catch (e_) {
-        msg = "[TYPESCRIPTWRAPPER]: " + msgStr;
+        msg = "[TYPESCRIPTWRAPPER]: ".concat(msgStr);
     }
     var err = createErrorMsg(msg);
     console.log(JSON.stringify(err));
