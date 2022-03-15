@@ -53,7 +53,8 @@ def paginate(func, *args, retry_strategy=no_retry, **kwargs):
     cursor = ""
     while True:
         res = retry_strategy(func, *args, **kwargs, cursor=cursor)
-        print(res)
+        # DEBUG
+        # print(res)
         cursor = res["cursor"]
         if res is None:
             break
