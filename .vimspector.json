@@ -1,0 +1,40 @@
+{
+  "configurations": {
+    "run": {
+      "adapter": "debugpy",
+      "configuration": {
+        // "name": "debug python",
+        "type": "python",
+        "request": "launch",
+        "stopOnEntry": false,
+        "console": "integratedTerminal",
+
+        "cwd": "${filedDirname}",
+        "environment": [],
+
+        "program": "${workspaceFolder}/",
+        "args": []
+      },
+      "breakpoints": {
+        "exception": {
+          "raised": "N",
+          "uncaught": ""
+        }
+      }
+    }
+    // ,
+    //"attach": {
+    //  "adapter": "multi-session",
+    //  "configuration": {
+    //    "request": "attach"
+    //  },
+    //  "breakpoints": {
+    //    "exception": {
+    //      "raised": "N",
+    //      "uncaught": ""
+    //    }
+    //  }
+    //}
+  }
+}
+// vim:ft=jsonc
